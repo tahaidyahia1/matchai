@@ -46,8 +46,8 @@ export default function Menu() {
                       className="w-full h-full object-cover"
                     />
                   ) : item.id === 'banana-flame' ? (
-                    <img 
-                      src="/IMG_9809.jpg" 
+                    <img
+                      src="/IMG_9809 3.jpg"
                       alt={item.name}
                       className="w-full h-full object-cover"
                     />
