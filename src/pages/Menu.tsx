@@ -45,6 +45,12 @@ export default function Menu() {
                       alt={item.name}
                       className="w-full h-full object-cover"
                     />
+                  ) : item.id === 'banana-flame' ? (
+                    <img 
+                      src="/IMG_9809.jpg" 
+                      alt={item.name}
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400">
                       <span className="text-4xl font-bold">{item.name.charAt(0)}</span>
