@@ -32,7 +32,7 @@ At machai we believe matcha is more than a drink. it's a ritual of balance, clar
             <div className="relative">
               <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-50 rounded-3xl overflow-hidden">
                 <img
-                  src="/daniel-stiel-3CzGKfWfYEk-unsplash.jpg"
+                  src="/348dabb9-de37-4148-ac58-bf1def118856.JPG"
                   alt="Matchai store interior with traditional matcha preparation"
                   className="w-full h-full object-cover"
                 />
