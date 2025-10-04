@@ -14,8 +14,9 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-black mb-6 max-w-md">
-              Experience the finest Japanese matcha with modern elegance in the heart of Agdal, Rabat. 
-              Where tradition meets sophistication.
+             Ready for you Matchai moment? 
+ 
+Join us for an unforgettable matcha experience — where Japanese tradition meets refined simplicity
             </p>
             <div className="flex space-x-4">
               <a
