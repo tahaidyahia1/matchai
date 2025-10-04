@@ -38,7 +38,7 @@ export default function Menu() {
           <div className="grid md:grid-cols-2 gap-8">
             {menuItems.map((item) => (
               <div key={item.id} className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group">
-                <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-50 relative overflow-hidden">
+                <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-50 relative overflow-hidden">
                   {item.id === 'rouge-cloud' ? (
                     <img 
                       src="/IMG_9808.jpg" 
