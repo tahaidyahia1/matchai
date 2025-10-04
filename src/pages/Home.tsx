@@ -1,14 +1,41 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { Award, MapPin, Leaf } from 'lucide-react';
-import Hero from '../components/Hero';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import MatchaScene from '../components/MatchaScene';
 import Button from '../components/Button';
 
 export default function Home() {
   return (
     <div>
-      {/* Hero Section */}
-      <Hero />
+      {/* 3D Hero Section */}
+      <div className="relative h-screen w-full">
+        <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
+          <Suspense fallback={null}>
+            <MatchaScene />
+            <OrbitControls enableZoom={false} enablePan={false} maxPolarAngle={Math.PI / 2} minPolarAngle={Math.PI / 3} />
+          </Suspense>
+        </Canvas>
+
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="text-center px-4">
+            <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-4 drop-shadow-lg">
+              Matchai
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-700 mb-8 drop-shadow-md">
+              Experience Matcha in 3D
+            </p>
+            <div className="pointer-events-auto">
+              <Link to="/menu">
+                <Button variant="primary" size="lg">
+                  Explore Our Menu
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
       
       {/* Intro Section */}
       <section className="py-20 px-4">
