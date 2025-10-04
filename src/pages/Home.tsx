@@ -29,8 +29,8 @@ export default function Home() {
             <div className="relative">
               <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl overflow-hidden">
                 <img 
-                  src="/IMG_9716.jpg" 
-                  alt="Premium Matcha"
+                  src="/7fe0472b-ea1c-43c0-94fb-e92e4c133647 2.jpg" 
+                  alt="Matchai signature drinks with layered matcha"
                   className="w-full h-full object-cover"
                 />
               </div>
