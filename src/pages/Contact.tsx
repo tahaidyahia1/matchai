@@ -206,7 +206,7 @@ export default function Contact() {
           
           <div className="rounded-2xl overflow-hidden shadow-lg">
             <iframe
-              src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=Matchai,Agdal+Rabat+Morocco&center=33.9969833,-6.8477536&zoom=15"
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13230.318383569584!2d-6.8477536!3d33.9969833!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda76d8e7d8da1d7%3A0x4e58be84bb251ec2!2sMatchai!5e0!3m2!1sen!2sma!4v1709644800000!5m2!1sen!2sma"
               width="100%"
               height="400"
               style={{ border: 0 }}
