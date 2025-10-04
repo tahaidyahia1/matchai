@@ -206,7 +206,7 @@ export default function Contact() {
           
           <div className="rounded-2xl overflow-hidden shadow-lg">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3306.4976955445537!2d-6.8447765!3d34.0093333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzTCsDAwJzMzLjYiTiA2wrA1MCc0MS4yIlc!5e0!3m2!1sen!2sma!4v1234567890"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3307.5738476923745!2d-6.850328499999999!3d33.9969833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda76d8e7d8da1d7%3A0x4e58be84bb251ec2!2sMatchai!5e0!3m2!1sen!2sma!4v1234567890"
               width="100%"
               height="400"
               style={{ border: 0 }}
