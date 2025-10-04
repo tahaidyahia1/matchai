@@ -18,9 +18,14 @@ export default function Footer() {
               Where tradition meets sophistication.
             </p>
             <div className="flex space-x-4">
-              <button className="w-10 h-10 bg-gray-700 text-white hover:bg-green-600 rounded-full flex items-center justify-center transition-colors">
+              <a
+                href="https://www.instagram.com/matchai.ma?igsh=YnA0bDVqMHVtdGN1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-gray-700 text-white hover:bg-green-600 rounded-full flex items-center justify-center transition-colors"
+              >
                 <Instagram className="h-5 w-5" />
-              </button>
+              </a>
               <button className="w-10 h-10 bg-gray-700 text-white hover:bg-green-600 rounded-full flex items-center justify-center transition-colors">
                 <Facebook className="h-5 w-5" />
               </button>
