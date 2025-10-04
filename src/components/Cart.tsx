@@ -170,7 +170,8 @@ export default function Cart() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
                   <div className="px-3 py-2 bg-gray-50 rounded-lg">
-                    <p className="text-gray-900">Cash on Delivery</p>
+                    <p className="text-gray-900 font-medium">Pay at Store</p>
+                    <p className="text-sm text-gray-600 mt-1">Complete payment when you pick up your order</p>
                   </div>
                 </div>
 
