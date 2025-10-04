@@ -58,9 +58,9 @@ export default function Contact() {
                   <div>
                     <h3 className="font-semibold text-gray-800 mb-1">Location</h3>
                     <p className="text-gray-600">Agdal, Rabat – Morocco</p>
-                    <a 
-                      href="https://maps.app.goo.gl/Y5gkcyyNVbcjmMHQ8" 
-                      target="_blank" 
+                    <a
+                      href="https://maps.app.goo.gl/sFxp9PsxGxm5dy167"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-black hover:text-gray-800 text-sm font-medium"
                     >
@@ -116,9 +116,9 @@ export default function Contact() {
                 >
                   Quick Order via WhatsApp
                 </Button>
-                <Button 
+                <Button
                   variant="outline"
-                  onClick={() => window.open('https://maps.app.goo.gl/Y5gkcyyNVbcjmMHQ8', '_blank')}
+                  onClick={() => window.open('https://maps.app.goo.gl/sFxp9PsxGxm5dy167', '_blank')}
                   className="w-full"
                 >
                   Get Directions
@@ -206,7 +206,7 @@ export default function Contact() {
           
           <div className="rounded-2xl overflow-hidden shadow-lg">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3307.8944444444446!2d-6.8356!3d34.0172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sAgdal%2C+Rabat%2C+Morocco!5e0!3m2!1sen!2sma!4v1234567890"
+              src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3306.4976955445537!2d-6.8447765!3d34.0093333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzTCsDAwJzMzLjYiTiA2wrA1MCc0MS4yIlc!5e0!3m2!1sen!2sma!4v1234567890"
               width="100%"
               height="400"
               style={{ border: 0 }}
