@@ -7,7 +7,6 @@ interface CheckoutFormData {
   phone: string;
   email: string;
   address: string;
-  paymentMethod: 'cash' | 'online';
 }
 
 export default function Cart() {
@@ -17,8 +16,7 @@ export default function Cart() {
     name: '',
     phone: '',
     email: '',
-    address: '',
-    paymentMethod: 'cash'
+    address: ''
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -171,29 +169,8 @@ export default function Cart() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
-                  <div className="space-y-2">
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="cash"
-                        checked={formData.paymentMethod === 'cash'}
-                        onChange={(e) => setFormData({ ...formData, paymentMethod: 'cash' })}
-                        className="mr-2"
-                      />
-                      Cash on Delivery
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="online"
-                        checked={formData.paymentMethod === 'online'}
-                        onChange={(e) => setFormData({ ...formData, paymentMethod: 'online' })}
-                        className="mr-2"
-                      />
-                      Online Payment
-                    </label>
+                  <div className="px-3 py-2 bg-gray-50 rounded-lg">
+                    <p className="text-gray-900">Cash on Delivery</p>
                   </div>
                 </div>
 
