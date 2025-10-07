@@ -15,7 +15,7 @@ export default function Hero() {
       <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
         <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-6 tracking-tight">
          
-          <span className="block text-black">MATCHAI</span>
+          <span className="block text-black">Matcha with Elegance</span>
         </h1>
         
         <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
