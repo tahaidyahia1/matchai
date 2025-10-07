@@ -16,7 +16,7 @@ export default function Footer() {
             <p className="text-black mb-6 max-w-md">
              Ready for you Matchai moment? 
  
-Join us for an unforgettable matcha experience — where Japanese tradition meets refined simplicity
+Join us for an unforgettable matcha experience — where Japanese tradition meets refined simplicity.
             </p>
             <div className="flex space-x-4">
               <a
