@@ -7,7 +7,13 @@ export default function Hero() {
   return (
     <div>
       <section className="relative h-[500px] pt-16 flex items-center justify-center bg-gradient-to-br from-gray-50 to-white overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://unsplash.com/fr/photos/une-cuillere-en-bois-remplie-de-poudre-verte-o4r21WG-VKw')] bg-cover bg-center opacity-10"></div>
+        <div className="absolute inset-0 opacity-10">
+          <img
+            src="/andrea-lacasse-o4r21WG-VKw-unsplash (1) copy.jpg"
+            alt="Matcha powder background"
+            className="w-full h-full object-cover"
+          />
+        </div>
 
         {/* Decorative elements */}
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gray-100 rounded-full blur-3xl opacity-30"></div>
@@ -34,19 +40,6 @@ export default function Hero() {
                 Learn More
               </Button>
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Image Section */}
-      <section className="py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="aspect-[16/9] bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl overflow-hidden">
-            <img
-              src="/andrea-lacasse-o4r21WG-VKw-unsplash (1) copy.jpg"
-              alt="Matcha powder preparation"
-              className="w-full h-full object-cover"
-            />
           </div>
         </div>
       </section>
