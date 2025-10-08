@@ -39,7 +39,7 @@ export default function Cart() {
 
     message += `\n💰 *Total: ${getTotal()} MAD*`;
 
-    const whatsappUrl = `https://wa.me/212682863571?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/212654339907?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
     dispatch({ type: 'CLEAR_CART' });
