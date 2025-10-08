@@ -31,8 +31,16 @@ export default function Contact() {
   return (
     <div className="pt-16">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
-        <div className="max-w-4xl mx-auto text-center px-4">
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src="/phuong-nguyen-DgW9B48pRb4-unsplash.jpg"
+            alt="Matcha powder"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-white/75"></div>
+        </div>
+        <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
             Get in Touch
           </h1>
