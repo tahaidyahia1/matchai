@@ -11,9 +11,9 @@ export default function Hero() {
           <img
             src="/andrea-lacasse-o4r21WG-VKw-unsplash (1) copy.jpg"
             alt="Matcha powder background"
-            className="w-full h-full object-cover brightness-110"
+            className="w-full h-full object-cover brightness-105"
           />
-          <div className="absolute inset-0 bg-white/60"></div>
+          <div className="absolute inset-0 bg-white/40"></div>
         </div>
 
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
