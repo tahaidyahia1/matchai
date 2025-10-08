@@ -52,11 +52,13 @@ export default function Menu() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">
-                      <span className="text-4xl font-bold">{item.name.charAt(0)}</span>
-                    </div>
+                    <img
+                      src="/PHOTO-2025-09-25-17-26-19.jpg"
+                      alt={item.name}
+                      className="w-full h-full object-cover"
+                    />
                   )}
-                  <div className="absolute inset-0 bg-gray-900/20"></div>
+                  <div className="absolute inset-0 bg-transparent"></div>
                 </div>
 
                 <div className="p-6">
