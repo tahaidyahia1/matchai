@@ -53,7 +53,7 @@ export default function Menu() {
                     />
                   ) : (
                     <img
-                      src="/PHOTO-2025-09-25-17-26-19.jpg"
+                      src="/IMG_9878.jpg"
                       alt={item.name}
                       className="w-full h-full object-cover"
                     />
