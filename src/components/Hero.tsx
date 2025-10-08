@@ -6,18 +6,15 @@ import Button from './Button';
 export default function Hero() {
   return (
     <div>
-      <section className="relative h-[500px] pt-16 flex items-center justify-center bg-gradient-to-br from-gray-50 to-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
+      <section className="relative h-[500px] pt-16 flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0">
           <img
             src="/andrea-lacasse-o4r21WG-VKw-unsplash (1) copy.jpg"
             alt="Matcha powder background"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover brightness-110"
           />
+          <div className="absolute inset-0 bg-white/60"></div>
         </div>
-
-        {/* Decorative elements */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gray-100 rounded-full blur-3xl opacity-30"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-gray-200 rounded-full blur-2xl opacity-40"></div>
 
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
           <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-6 tracking-tight">
