@@ -21,8 +21,27 @@ export default function Cart() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the order to your backend
-    alert('Order placed successfully! We will contact you shortly.');
+
+    let message = `🛒 *New Order from Matchai*\n\n`;
+    message += `👤 *Customer Details:*\n`;
+    message += `Name: ${formData.name}\n`;
+    message += `Phone: ${formData.phone}\n`;
+    if (formData.email) message += `Email: ${formData.email}\n`;
+    if (formData.address) message += `Address: ${formData.address}\n`;
+
+    message += `\n📋 *Order Items:*\n`;
+    state.items.forEach((item, index) => {
+      message += `\n${index + 1}. ${item.menuItem.name}\n`;
+      message += `   Size: ${item.size.charAt(0).toUpperCase() + item.size.slice(1)}\n`;
+      message += `   Quantity: ${item.quantity}\n`;
+      message += `   Price: ${item.menuItem.prices[item.size] * item.quantity} MAD\n`;
+    });
+
+    message += `\n💰 *Total: ${getTotal()} MAD*`;
+
+    const whatsappUrl = `https://wa.me/212654339907?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+
     dispatch({ type: 'CLEAR_CART' });
     dispatch({ type: 'CLOSE_CART' });
     setShowCheckout(false);
