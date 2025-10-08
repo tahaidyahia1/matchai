@@ -25,7 +25,7 @@ export default function Contact() {
   };
 
   const handleWhatsApp = () => {
-    window.open('https://wa.me/212654339907', '_blank');
+    window.open('https://wa.me/212682863571', '_blank');
   };
 
   return (
@@ -83,8 +83,8 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800 mb-1">Phone & WhatsApp</h3>
-                    <p className="text-gray-600">+212 654-339907</p>
-                    <button 
+                    <p className="text-gray-600">+212 682-863571</p>
+                    <button
                       onClick={handleWhatsApp}
                       className="text-black hover:text-gray-800 text-sm font-medium"
                     >
