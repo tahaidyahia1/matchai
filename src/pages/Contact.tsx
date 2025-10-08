@@ -44,7 +44,7 @@ export default function Contact() {
           <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
             Get in Touch
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-gray-900 max-w-2xl mx-auto">
             Visit us, call us, or drop us a message. We're here to serve you the perfect matcha experience.
           </p>
         </div>
