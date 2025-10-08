@@ -40,14 +40,20 @@ export default function Menu() {
               <div key={item.id} className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group">
                 <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-50 relative overflow-hidden">
                   {item.id === 'rouge-cloud' ? (
-                    <img 
-                      src="/IMG_9808.jpg" 
+                    <img
+                      src="/IMG_9808.jpg"
                       alt={item.name}
                       className="w-full h-full object-cover"
                     />
                   ) : item.id === 'banana-flame' ? (
                     <img
                       src="/IMG_9809 3.jpg"
+                      alt={item.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : item.id === 'pistachio-dream' ? (
+                    <img
+                      src="/IMG_9880.jpg"
                       alt={item.name}
                       className="w-full h-full object-cover"
                     />
