@@ -103,11 +103,11 @@ At machai we believe matcha is more than a drink. it's a ritual of balance, clar
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
-              <div className="aspect-[4/3] bg-gradient-to-br from-gray-200 to-gray-100 rounded-3xl overflow-hidden p-4">
+              <div className="aspect-square bg-gradient-to-br from-gray-200 to-gray-100 rounded-3xl overflow-hidden">
                 <img
-                  src="/9d9b8728-9791-4702-9c35-23133cfd7cbc copy.JPG"
-                  alt="Matchai interior"
-                  className="w-full h-full object-contain"
+                  src="/6f6630a8-9927-4ab3-ad76-0a31ed7cfe83.JPG"
+                  alt="Matchai matcha preparation"
+                  className="w-full h-full object-cover"
                 />
               </div>
               <div className="absolute -top-6 -right-6 w-32 h-32 bg-white rounded-full shadow-xl flex items-center justify-center">
