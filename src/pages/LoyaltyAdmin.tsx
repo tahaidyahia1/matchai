@@ -1,23 +1,5 @@
 import React, { useState, useEffect } from 'react';
-type Customer = {
-  id: string;
-  name: string;
-  phone: string;
-  email: string | null;
-  total_points: number;
-  created_at: string;
-  updated_at: string;
-};
-
-type Transaction = {
-  id: string;
-  customer_id: string;
-  points: number;
-  description: string | null;
-  transaction_type: 'purchase' | 'reward' | 'redemption' | 'adjustment';
-  created_at: string;
-  created_by: string | null;
-};
+import { supabase, Customer, Transaction } from '../lib/supabase';
 import { Plus, Minus, Search, Download, User, Phone, Mail, TrendingUp } from 'lucide-react';
 
 export default function LoyaltyAdmin() {
@@ -52,24 +34,97 @@ export default function LoyaltyAdmin() {
   }, [selectedCustomer]);
 
   const loadCustomers = async () => {
-    setLoading(false);
-    setCustomers([]);
+    try {
+      const { data, error } = await supabase
+        .from('customers')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setCustomers(data || []);
+    } catch (error) {
+      console.error('Error loading customers:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const loadTransactions = async (customerId: string) => {
-    setTransactions([]);
+    try {
+      const { data, error } = await supabase
+        .from('transactions')
+        .select('*')
+        .eq('customer_id', customerId)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setTransactions(data || []);
+    } catch (error) {
+      console.error('Error loading transactions:', error);
+    }
   };
 
   const handleAddCustomer = async (e: React.FormEvent) => {
     e.preventDefault();
-    setNewCustomer({ name: '', phone: '', email: '' });
-    setShowAddCustomer(false);
+    try {
+      const { data, error } = await supabase
+        .from('customers')
+        .insert([{
+          name: newCustomer.name,
+          phone: newCustomer.phone,
+          email: newCustomer.email || null
+        }])
+        .select()
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (data) {
+        setCustomers([data, ...customers]);
+      }
+      setNewCustomer({ name: '', phone: '', email: '' });
+      setShowAddCustomer(false);
+    } catch (error) {
+      console.error('Error adding customer:', error);
+      alert('Error adding customer. Please check if phone number is unique.');
+    }
   };
 
   const handleAddPoints = async (e: React.FormEvent) => {
     e.preventDefault();
-    setPointsTransaction({ points: '', description: '', type: 'purchase' });
-    setShowAddPoints(false);
+    if (!selectedCustomer) return;
+
+    try {
+      const pointsValue = parseInt(pointsTransaction.points);
+      if (isNaN(pointsValue)) {
+        alert('Please enter a valid number');
+        return;
+      }
+
+      const { error } = await supabase
+        .from('transactions')
+        .insert([{
+          customer_id: selectedCustomer.id,
+          points: pointsValue,
+          description: pointsTransaction.description || null,
+          transaction_type: pointsTransaction.type
+        }]);
+
+      if (error) throw error;
+
+      await loadCustomers();
+      const updatedCustomer = customers.find(c => c.id === selectedCustomer.id);
+      if (updatedCustomer) {
+        setSelectedCustomer(updatedCustomer);
+      }
+      await loadTransactions(selectedCustomer.id);
+
+      setPointsTransaction({ points: '', description: '', type: 'purchase' });
+      setShowAddPoints(false);
+    } catch (error) {
+      console.error('Error adding points:', error);
+      alert('Error adding points');
+    }
   };
 
   const exportToCSV = () => {
