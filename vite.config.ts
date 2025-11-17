@@ -5,8 +5,6 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     exclude: ['lucide-react'],
-  },
-  resolve: {
-    dedupe: ['@supabase/supabase-js']
+    include: ['@supabase/supabase-js']
   }
 });
