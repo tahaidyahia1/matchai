@@ -18,12 +18,20 @@ Deno.serve(async (req: Request) => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    });
 
     const { action, email, password, fullName, phone } = await req.json();
 
     if (action === 'signup') {
+      console.log('Signup attempt for email:', email);
+
       const passwordHash = await bcrypt.hash(password);
+      console.log('Password hashed successfully');
 
       const { data: newUser, error: userError } = await supabase
         .from('users')
@@ -36,7 +44,12 @@ Deno.serve(async (req: Request) => {
         .select('id, email, full_name, phone')
         .single();
 
-      if (userError) throw userError;
+      if (userError) {
+        console.error('User creation error:', userError);
+        throw new Error(userError.message || 'Failed to create user');
+      }
+
+      console.log('User created:', newUser);
 
       const { error: loyaltyError } = await supabase
         .from('loyalty_points')
@@ -47,7 +60,12 @@ Deno.serve(async (req: Request) => {
           tier: 'Green Member'
         });
 
-      if (loyaltyError) throw loyaltyError;
+      if (loyaltyError) {
+        console.error('Loyalty points creation error:', loyaltyError);
+        throw new Error(loyaltyError.message || 'Failed to create loyalty points');
+      }
+
+      console.log('Loyalty points created for user:', newUser.id);
 
       return new Response(
         JSON.stringify({ user: newUser }),
@@ -59,6 +77,8 @@ Deno.serve(async (req: Request) => {
         }
       );
     } else if (action === 'signin') {
+      console.log('Signin attempt for email:', email);
+
       const { data: userData, error: fetchError } = await supabase
         .from('users')
         .select('id, email, full_name, phone, password_hash')
@@ -66,11 +86,13 @@ Deno.serve(async (req: Request) => {
         .maybeSingle();
 
       if (fetchError || !userData) {
+        console.error('User fetch error:', fetchError);
         throw new Error('Invalid email or password');
       }
 
       const isValid = await bcrypt.compare(password, userData.password_hash);
       if (!isValid) {
+        console.log('Invalid password for user:', email);
         throw new Error('Invalid email or password');
       }
 
@@ -80,6 +102,8 @@ Deno.serve(async (req: Request) => {
         full_name: userData.full_name,
         phone: userData.phone
       };
+
+      console.log('User signed in successfully:', email);
 
       return new Response(
         JSON.stringify({ user }),
@@ -94,8 +118,9 @@ Deno.serve(async (req: Request) => {
 
     throw new Error('Invalid action');
   } catch (error) {
+    console.error('Error in user-auth function:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error.message || 'An unexpected error occurred' }),
       {
         status: 400,
         headers: {

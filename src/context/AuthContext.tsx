@@ -83,7 +83,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     const result = await response.json();
-    if (result.error) throw new Error(result.error);
+
+    if (result.error) {
+      throw new Error(result.error);
+    }
+
+    if (!result.user || !result.user.id) {
+      throw new Error('Failed to create account. Please try again.');
+    }
 
     setUser(result.user);
     localStorage.setItem('matchai_user', JSON.stringify(result.user));
@@ -105,7 +112,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     const result = await response.json();
-    if (result.error) throw new Error(result.error);
+
+    if (result.error) {
+      throw new Error(result.error);
+    }
+
+    if (!result.user || !result.user.id) {
+      throw new Error('Failed to sign in. Please try again.');
+    }
 
     setUser(result.user);
     localStorage.setItem('matchai_user', JSON.stringify(result.user));
