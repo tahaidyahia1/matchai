@@ -1,10 +1,150 @@
-import React from 'react';
-import { Gift, Smartphone, Star, Coffee, Award, CreditCard } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Gift, Smartphone, Star, Coffee, Award, CreditCard, LogOut, History } from 'lucide-react';
 import Button from '../components/Button';
+import { useAuth } from '../context/AuthContext';
+import AuthModal from '../components/AuthModal';
+import { getPointsTransactions } from '../services/loyaltyService';
+
+interface Transaction {
+  id: string;
+  points: number;
+  transaction_type: string;
+  order_amount: number | null;
+  description: string;
+  created_at: string;
+}
 
 export default function Loyalty() {
+  const { user, loyaltyData, signOut, refreshLoyaltyData } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showTransactions, setShowTransactions] = useState(false);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    if (user && showTransactions) {
+      loadTransactions();
+    }
+  }, [user, showTransactions]);
+
+  const loadTransactions = async () => {
+    if (user) {
+      try {
+        const data = await getPointsTransactions(user.id);
+        setTransactions(data);
+      } catch (error) {
+        console.error('Failed to load transactions:', error);
+      }
+    }
+  };
+
+  const getTierColor = (tier: string) => {
+    if (tier === 'Gold VIP') return 'from-yellow-50 to-yellow-100 border-yellow-300';
+    if (tier === 'Silver Elite') return 'from-gray-50 to-gray-100 border-gray-300';
+    return 'from-gray-50 to-white border-gray-200';
+  };
+
   return (
     <div className="pt-16">
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={() => refreshLoyaltyData()}
+      />
+      {user && loyaltyData && (
+        <section className="py-12 bg-gradient-to-br from-gray-900 to-black text-white">
+          <div className="max-w-4xl mx-auto px-4">
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <h2 className="text-3xl font-bold mb-2">Welcome back, {user.full_name}!</h2>
+                <p className="text-gray-300">{user.email}</p>
+              </div>
+              <button
+                onClick={signOut}
+                className="flex items-center space-x-2 px-4 py-2 bg-white bg-opacity-10 hover:bg-opacity-20 rounded-lg transition-colors"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Sign Out</span>
+              </button>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4 mb-6">
+              <div className={`bg-gradient-to-br ${getTierColor(loyaltyData.tier)} rounded-2xl p-6 border-2`}>
+                <div className="text-center">
+                  <Star className="h-8 w-8 mx-auto mb-2 text-gray-800" />
+                  <div className="text-3xl font-bold text-gray-900 mb-1">{loyaltyData.total_points}</div>
+                  <div className="text-sm text-gray-700">Current Points</div>
+                </div>
+              </div>
+
+              <div className="bg-white bg-opacity-10 rounded-2xl p-6">
+                <div className="text-center">
+                  <Award className="h-8 w-8 mx-auto mb-2" />
+                  <div className="text-2xl font-bold mb-1">{loyaltyData.tier}</div>
+                  <div className="text-sm text-gray-300">Your Tier</div>
+                </div>
+              </div>
+
+              <div className="bg-white bg-opacity-10 rounded-2xl p-6">
+                <div className="text-center">
+                  <Coffee className="h-8 w-8 mx-auto mb-2" />
+                  <div className="text-3xl font-bold mb-1">{loyaltyData.lifetime_points}</div>
+                  <div className="text-sm text-gray-300">Lifetime Points</div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowTransactions(!showTransactions)}
+              className="flex items-center space-x-2 px-4 py-2 bg-white bg-opacity-10 hover:bg-opacity-20 rounded-lg transition-colors"
+            >
+              <History className="h-4 w-4" />
+              <span>{showTransactions ? 'Hide' : 'View'} Transaction History</span>
+            </button>
+
+            {showTransactions && transactions.length > 0 && (
+              <div className="mt-6 bg-white bg-opacity-10 rounded-2xl p-6">
+                <h3 className="text-xl font-bold mb-4">Recent Transactions</h3>
+                <div className="space-y-3">
+                  {transactions.slice(0, 10).map((transaction) => (
+                    <div key={transaction.id} className="flex justify-between items-center py-2 border-b border-white border-opacity-10">
+                      <div>
+                        <div className="font-medium">{transaction.description}</div>
+                        <div className="text-sm text-gray-300">
+                          {new Date(transaction.created_at).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className={`font-bold ${transaction.points > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                        {transaction.points > 0 ? '+' : ''}{transaction.points} pts
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {!user && (
+        <section className="py-20 bg-gradient-to-br from-gray-900 to-black text-white">
+          <div className="max-w-4xl mx-auto text-center px-4">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6">
+              Sign in to view your points
+            </h2>
+            <p className="text-xl text-gray-300 mb-8">
+              Track your loyalty points, view your tier status, and see your transaction history.
+            </p>
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={() => setShowAuthModal(true)}
+            >
+              Sign In / Sign Up
+            </Button>
+          </div>
+        </section>
+      )}
+
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-4xl mx-auto text-center px-4">
@@ -217,11 +357,11 @@ export default function Loyalty() {
                     <div className="text-xl font-bold">Matchai Points</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold mb-1">150</div>
+                    <div className="text-3xl font-bold mb-1">{user && loyaltyData ? loyaltyData.total_points : '150'}</div>
                     <div className="text-gray-300 text-sm">Points Available</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-gray-300 text-xs">Silver Elite Member</div>
+                    <div className="text-gray-300 text-xs">{user && loyaltyData ? loyaltyData.tier : 'Silver Elite Member'}</div>
                   </div>
                 </div>
               </div>

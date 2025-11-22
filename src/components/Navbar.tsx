@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X } from 'lucide-react';
+import { ShoppingCart, Menu, X, User } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { dispatch, getItemCount } = useCart();
+  const { user } = useAuth();
   const location = useLocation();
   const itemCount = getItemCount();
 
@@ -49,6 +51,16 @@ export default function Navbar() {
 
           {/* Cart and Mobile Menu */}
           <div className="flex items-center space-x-4">
+            {user && (
+              <Link
+                to="/loyalty"
+                className="hidden md:flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <User className="h-5 w-5 text-gray-700" />
+                <span className="text-sm font-medium text-gray-700">{user.full_name}</span>
+              </Link>
+            )}
+
             <button
               onClick={() => dispatch({ type: 'TOGGLE_CART' })}
               className="relative p-2 text-gray-700 hover:text-black transition-colors"

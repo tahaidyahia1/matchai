@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
+import { X, Plus, Minus, ShoppingBag, Star } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
+import { addPointsForPurchase } from '../services/loyaltyService';
+import AuthModal from './AuthModal';
 
 interface CheckoutFormData {
   name: string;
@@ -11,7 +14,11 @@ interface CheckoutFormData {
 
 export default function Cart() {
   const { state, dispatch, getTotal } = useCart();
+  const { user, refreshLoyaltyData } = useAuth();
   const [showCheckout, setShowCheckout] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
+  const [earnedPoints, setEarnedPoints] = useState(0);
   const [formData, setFormData] = useState<CheckoutFormData>({
     name: '',
     phone: '',
@@ -19,13 +26,31 @@ export default function Cart() {
     address: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the order to your backend
-    alert('Order placed successfully! We will contact you shortly.');
-    dispatch({ type: 'CLEAR_CART' });
-    dispatch({ type: 'CLOSE_CART' });
-    setShowCheckout(false);
+
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+
+    try {
+      const total = getTotal();
+      const result = await addPointsForPurchase(user.id, total);
+      setEarnedPoints(result.pointsEarned);
+      setOrderSuccess(true);
+      await refreshLoyaltyData();
+
+      setTimeout(() => {
+        dispatch({ type: 'CLEAR_CART' });
+        dispatch({ type: 'CLOSE_CART' });
+        setShowCheckout(false);
+        setOrderSuccess(false);
+        setEarnedPoints(0);
+      }, 3000);
+    } catch (error) {
+      alert('Failed to process order. Please try again.');
+    }
   };
 
   const updateQuantity = (itemId: string, newQuantity: number) => {
@@ -36,9 +61,19 @@ export default function Cart() {
     dispatch({ type: 'REMOVE_ITEM', payload: itemId });
   };
 
+  const pointsToEarn = Math.floor(getTotal() / 10);
+
   if (!state.isOpen) return null;
 
   return (
+    <>
+    <AuthModal
+      isOpen={showAuthModal}
+      onClose={() => setShowAuthModal(false)}
+      onSuccess={() => {
+        setShowAuthModal(false);
+      }}
+    />
     <div className="fixed inset-0 z-50 overflow-hidden">
       <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => dispatch({ type: 'CLOSE_CART' })} />
       
@@ -102,6 +137,28 @@ export default function Cart() {
 
               {state.items.length > 0 && (
                 <div className="border-t border-gray-200 p-4 space-y-4">
+                  {user && pointsToEarn > 0 && (
+                    <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg p-3 flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Star className="h-5 w-5 text-yellow-600" />
+                        <span className="text-sm font-medium text-gray-800">You'll earn</span>
+                      </div>
+                      <span className="text-lg font-bold text-gray-900">{pointsToEarn} points</span>
+                    </div>
+                  )}
+                  {!user && (
+                    <div className="bg-gray-50 rounded-lg p-3 text-center">
+                      <p className="text-sm text-gray-700">
+                        <button
+                          onClick={() => setShowAuthModal(true)}
+                          className="font-medium text-black hover:underline"
+                        >
+                          Sign in
+                        </button>
+                        {' '}to earn {pointsToEarn} loyalty points
+                      </p>
+                    </div>
+                  )}
                   <div className="flex justify-between items-center text-lg font-semibold">
                     <span>Total:</span>
                     <span>{getTotal()} MAD</span>
@@ -117,12 +174,26 @@ export default function Cart() {
             </>
           ) : (
             <div className="flex-1 overflow-y-auto p-4">
-              <button
-                className="mb-4 text-black hover:text-gray-800 font-medium"
-                onClick={() => setShowCheckout(false)}
-              >
-                ← Back to Cart
-              </button>
+              {orderSuccess ? (
+                <div className="text-center py-12">
+                  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Star className="h-10 w-10 text-green-600" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Order Placed!</h3>
+                  <p className="text-gray-600 mb-4">We will contact you shortly.</p>
+                  <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg p-4 inline-block">
+                    <p className="text-sm text-gray-700 mb-1">You earned</p>
+                    <p className="text-3xl font-bold text-gray-900">{earnedPoints} points</p>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <button
+                    className="mb-4 text-black hover:text-gray-800 font-medium"
+                    onClick={() => setShowCheckout(false)}
+                  >
+                    ← Back to Cart
+                  </button>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
@@ -188,10 +259,13 @@ export default function Cart() {
                   </button>
                 </div>
               </form>
+                </>
+              )}
             </div>
           )}
         </div>
       </div>
     </div>
+    </>
   );
 }
