@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Gift, Smartphone, Star, Coffee, Award, CreditCard, LogOut, History, ShoppingBag } from 'lucide-react';
+import { Gift, Smartphone, Star, Coffee, Award, CreditCard, LogOut, History, ShoppingBag, Search } from 'lucide-react';
 import Button from '../components/Button';
 import { useAuth } from '../context/AuthContext';
 import AuthModal from '../components/AuthModal';
-import { getPointsTransactions, addPointsForPurchase } from '../services/loyaltyService';
+import { getPointsTransactions, addPointsForPurchase, lookupPointsByPhone } from '../services/loyaltyService';
 
 interface Transaction {
   id: string;
@@ -23,6 +23,10 @@ export default function Loyalty() {
   const [orderAmount, setOrderAmount] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [purchaseMessage, setPurchaseMessage] = useState('');
+  const [showLookupForm, setShowLookupForm] = useState(false);
+  const [lookupPhone, setLookupPhone] = useState('');
+  const [lookupResult, setLookupResult] = useState<any>(null);
+  const [lookupError, setLookupError] = useState('');
 
   useEffect(() => {
     if (user && showTransactions) {
@@ -66,6 +70,25 @@ export default function Loyalty() {
     } catch (error) {
       setPurchaseMessage('Failed to add points. Please try again.');
       console.error('Purchase error:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleLookup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!lookupPhone) return;
+
+    setIsProcessing(true);
+    setLookupError('');
+    setLookupResult(null);
+
+    try {
+      const result = await lookupPointsByPhone(lookupPhone);
+      setLookupResult(result);
+    } catch (error: any) {
+      setLookupError(error.message || 'Unable to find account with this phone number');
+      console.error('Lookup error:', error);
     } finally {
       setIsProcessing(false);
     }
@@ -222,20 +245,88 @@ export default function Loyalty() {
 
       {!user && (
         <section className="py-20 bg-gradient-to-br from-gray-900 to-black text-white">
-          <div className="max-w-4xl mx-auto text-center px-4">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">
-              Sign in to view your points
-            </h2>
-            <p className="text-xl text-gray-300 mb-8">
-              Track your loyalty points, view your tier status, and see your transaction history.
-            </p>
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={() => setShowAuthModal(true)}
-            >
-              Sign In / Sign Up
-            </Button>
+          <div className="max-w-4xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-5xl font-bold mb-6">
+                Check Your Points Balance
+              </h2>
+              <p className="text-xl text-gray-300 mb-8">
+                Enter your phone number to view your loyalty points, tier status, and rewards.
+              </p>
+            </div>
+
+            <div className="max-w-md mx-auto bg-white bg-opacity-10 rounded-2xl p-8 mb-8">
+              <form onSubmit={handleLookup} className="space-y-4">
+                <div>
+                  <label htmlFor="lookupPhone" className="block text-sm font-medium mb-2">
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    id="lookupPhone"
+                    value={lookupPhone}
+                    onChange={(e) => setLookupPhone(e.target.value)}
+                    placeholder="e.g., 0612345678"
+                    required
+                    className="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isProcessing}
+                  className="w-full flex items-center justify-center space-x-2 px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Search className="h-5 w-5" />
+                  <span>{isProcessing ? 'Searching...' : 'Check Balance'}</span>
+                </button>
+                {lookupError && (
+                  <p className="text-sm text-red-400">{lookupError}</p>
+                )}
+              </form>
+            </div>
+
+            {lookupResult && (
+              <div className="max-w-2xl mx-auto bg-white bg-opacity-10 rounded-2xl p-8 mb-8">
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-bold mb-2">{lookupResult.user.full_name}</h3>
+                  <p className="text-gray-300">{lookupResult.user.email}</p>
+                </div>
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className={`bg-gradient-to-br ${getTierColor(lookupResult.loyalty.tier)} rounded-xl p-6 border-2`}>
+                    <div className="text-center">
+                      <Star className="h-8 w-8 mx-auto mb-2 text-gray-800" />
+                      <div className="text-3xl font-bold text-gray-900 mb-1">{lookupResult.loyalty.total_points}</div>
+                      <div className="text-sm text-gray-700">Current Points</div>
+                    </div>
+                  </div>
+                  <div className="bg-white bg-opacity-10 rounded-xl p-6">
+                    <div className="text-center">
+                      <Award className="h-8 w-8 mx-auto mb-2" />
+                      <div className="text-xl font-bold mb-1">{lookupResult.loyalty.tier}</div>
+                      <div className="text-sm text-gray-300">Your Tier</div>
+                    </div>
+                  </div>
+                  <div className="bg-white bg-opacity-10 rounded-xl p-6">
+                    <div className="text-center">
+                      <Coffee className="h-8 w-8 mx-auto mb-2" />
+                      <div className="text-3xl font-bold mb-1">{lookupResult.loyalty.lifetime_points}</div>
+                      <div className="text-sm text-gray-300">Lifetime Points</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="text-center">
+              <p className="text-gray-300 mb-4">Want to manage your account?</p>
+              <Button
+                variant="secondary"
+                size="lg"
+                onClick={() => setShowAuthModal(true)}
+              >
+                Sign In / Sign Up
+              </Button>
+            </div>
           </div>
         </section>
       )}

@@ -36,3 +36,22 @@ export async function getPointsTransactions(userId: string) {
 
   return result.data;
 }
+
+export async function lookupPointsByPhone(phone: string) {
+  const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/loyalty-operations`;
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      action: 'lookup-by-phone',
+      phone
+    })
+  });
+
+  const result = await response.json();
+  if (result.error) throw new Error(result.error);
+
+  return result.data;
+}
