@@ -40,8 +40,8 @@ export default function Menu() {
               <div key={item.id} className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group">
                 <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-50 relative overflow-hidden">
                   {item.id === 'rouge-cloud' ? (
-                    <img
-                      src="/IMG_9808.jpg"
+                    <img 
+                      src="/IMG_9808.jpg" 
                       alt={item.name}
                       className="w-full h-full object-cover"
                     />
@@ -51,20 +51,12 @@ export default function Menu() {
                       alt={item.name}
                       className="w-full h-full object-cover"
                     />
-                  ) : item.id === 'pistachio-dream' ? (
-                    <img
-                      src="/IMG_9880.jpg"
-                      alt={item.name}
-                      className="w-full h-full object-cover"
-                    />
                   ) : (
-                    <img
-                      src="/IMG_9878.jpg"
-                      alt={item.name}
-                      className="w-full h-full object-cover"
-                    />
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      <span className="text-4xl font-bold">{item.name.charAt(0)}</span>
+                    </div>
                   )}
-                  <div className="absolute inset-0 bg-transparent"></div>
+                  <div className="absolute inset-0 bg-gray-900/20"></div>
                 </div>
 
                 <div className="p-6">

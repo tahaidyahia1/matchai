@@ -31,20 +31,12 @@ export default function Contact() {
   return (
     <div className="pt-16">
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src="/phuong-nguyen-DgW9B48pRb4-unsplash.jpg"
-            alt="Matcha powder"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-white/75"></div>
-        </div>
-        <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-4xl mx-auto text-center px-4">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
             Get in Touch
           </h1>
-          <p className="text-xl md:text-2xl text-gray-900 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto">
             Visit us, call us, or drop us a message. We're here to serve you the perfect matcha experience.
           </p>
         </div>
@@ -84,7 +76,7 @@ export default function Contact() {
                   <div>
                     <h3 className="font-semibold text-gray-800 mb-1">Phone & WhatsApp</h3>
                     <p className="text-gray-600">+212 654-339907</p>
-                    <button
+                    <button 
                       onClick={handleWhatsApp}
                       className="text-black hover:text-gray-800 text-sm font-medium"
                     >

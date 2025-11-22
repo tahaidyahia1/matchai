@@ -104,9 +104,10 @@ At machai we believe matcha is more than a drink. it's a ritual of balance, clar
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
               <div className="aspect-square bg-gradient-to-br from-gray-200 to-gray-100 rounded-3xl overflow-hidden">
-                <img
-                  src="/6f6630a8-9927-4ab3-ad76-0a31ed7cfe83.JPG"
-                  alt="Matchai matcha preparation"
+                <img 
+                  src="https://images.unsplash.com/photo-1565117764032-21d3efebc7e3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+"
+                  alt="Matchai interior"
                   className="w-full h-full object-cover"
                 />
               </div>
