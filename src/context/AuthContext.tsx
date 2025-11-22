@@ -1,6 +1,4 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { supabase } from '../lib/supabase';
-import bcrypt from 'bcryptjs';
 
 interface User {
   id: string;
@@ -33,14 +31,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const fetchLoyaltyData = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('loyalty_points')
-      .select('total_points, lifetime_points, tier')
-      .eq('user_id', userId)
-      .maybeSingle();
+    try {
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/loyalty-operations`;
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: 'get-loyalty-data', userId })
+      });
 
-    if (!error && data) {
-      setLoyaltyData(data);
+      const result = await response.json();
+      if (result.data) {
+        setLoyaltyData(result.data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch loyalty data:', error);
     }
   };
 
@@ -61,61 +67,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string, phone?: string) => {
-    const passwordHash = await bcrypt.hash(password, 10);
-
-    const { data: newUser, error: userError } = await supabase
-      .from('users')
-      .insert({
+    const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/user-auth`;
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'signup',
         email,
-        password_hash: passwordHash,
-        full_name: fullName,
-        phone: phone || null
+        password,
+        fullName,
+        phone
       })
-      .select('id, email, full_name, phone')
-      .single();
+    });
 
-    if (userError) throw userError;
+    const result = await response.json();
+    if (result.error) throw new Error(result.error);
 
-    await supabase
-      .from('loyalty_points')
-      .insert({
-        user_id: newUser.id,
-        total_points: 0,
-        lifetime_points: 0,
-        tier: 'Green Member'
-      });
-
-    setUser(newUser);
-    localStorage.setItem('matchai_user', JSON.stringify(newUser));
-    await fetchLoyaltyData(newUser.id);
+    setUser(result.user);
+    localStorage.setItem('matchai_user', JSON.stringify(result.user));
+    await fetchLoyaltyData(result.user.id);
   };
 
   const signIn = async (email: string, password: string) => {
-    const { data: userData, error: fetchError } = await supabase
-      .from('users')
-      .select('id, email, full_name, phone, password_hash')
-      .eq('email', email)
-      .maybeSingle();
+    const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/user-auth`;
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'signin',
+        email,
+        password
+      })
+    });
 
-    if (fetchError || !userData) {
-      throw new Error('Invalid email or password');
-    }
+    const result = await response.json();
+    if (result.error) throw new Error(result.error);
 
-    const isValid = await bcrypt.compare(password, userData.password_hash);
-    if (!isValid) {
-      throw new Error('Invalid email or password');
-    }
-
-    const user = {
-      id: userData.id,
-      email: userData.email,
-      full_name: userData.full_name,
-      phone: userData.phone
-    };
-
-    setUser(user);
-    localStorage.setItem('matchai_user', JSON.stringify(user));
-    await fetchLoyaltyData(user.id);
+    setUser(result.user);
+    localStorage.setItem('matchai_user', JSON.stringify(result.user));
+    await fetchLoyaltyData(result.user.id);
   };
 
   const signOut = async () => {
