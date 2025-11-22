@@ -1,11 +1,23 @@
 import { createClient } from 'npm:@supabase/supabase-js@2.84.0';
-import * as bcrypt from 'https://deno.land/x/bcrypt@v0.4.1/mod.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Client-Info, Apikey',
 };
+
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function verifyPassword(password: string, hash: string): Promise<boolean> {
+  const passwordHash = await hashPassword(password);
+  return passwordHash === hash;
+}
 
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
@@ -30,7 +42,17 @@ Deno.serve(async (req: Request) => {
     if (action === 'signup') {
       console.log('Signup attempt for email:', email);
 
-      const passwordHash = await bcrypt.hash(password);
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', email)
+        .maybeSingle();
+
+      if (existingUser) {
+        throw new Error('An account with this email already exists');
+      }
+
+      const passwordHash = await hashPassword(password);
       console.log('Password hashed successfully');
 
       const { data: newUser, error: userError } = await supabase
@@ -70,6 +92,7 @@ Deno.serve(async (req: Request) => {
       return new Response(
         JSON.stringify({ user: newUser }),
         {
+          status: 200,
           headers: {
             ...corsHeaders,
             'Content-Type': 'application/json',
@@ -90,7 +113,7 @@ Deno.serve(async (req: Request) => {
         throw new Error('Invalid email or password');
       }
 
-      const isValid = await bcrypt.compare(password, userData.password_hash);
+      const isValid = await verifyPassword(password, userData.password_hash);
       if (!isValid) {
         console.log('Invalid password for user:', email);
         throw new Error('Invalid email or password');
@@ -108,6 +131,7 @@ Deno.serve(async (req: Request) => {
       return new Response(
         JSON.stringify({ user }),
         {
+          status: 200,
           headers: {
             ...corsHeaders,
             'Content-Type': 'application/json',
