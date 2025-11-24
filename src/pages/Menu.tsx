@@ -22,7 +22,6 @@ export default function Menu() {
         </div>
         <div className="max-w-5xl mx-auto text-center px-4 relative z-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-gray-200 mb-8 animate-slide-up">
-            <Sparkles className="h-4 w-4 text-gray-700" />
             <span className="text-sm font-medium text-gray-700" style={{ fontFamily: 'Oswald, sans-serif' }}>Ceremonially Crafted</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-black text-gray-800 mb-8 animate-fade-in tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
