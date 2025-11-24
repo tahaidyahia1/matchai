@@ -189,8 +189,9 @@ export default function AdminDashboard() {
     setPurchaseCustomer(null);
 
     try {
-      const result = await getAllCustomers();
-      const found = result.data.find(c => c.phone === purchasePhone);
+      const result = await getAllCustomers(1, 50, purchasePhone);
+      console.log('Search result:', result);
+      const found = result.data.find(c => c.phone === purchasePhone || c.phone?.includes(purchasePhone));
 
       if (found) {
         setPurchaseCustomer(found);
@@ -199,7 +200,8 @@ export default function AdminDashboard() {
         setPurchaseMessage('Customer not found. Please check the phone number or ask customer to sign up first.');
       }
     } catch (error: any) {
-      setPurchaseMessage('Error searching for customer');
+      console.error('Search error:', error);
+      setPurchaseMessage(`Error searching for customer: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
