@@ -5,7 +5,7 @@ import Button from './Button';
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[90vh] pt-16 flex items-center justify-center overflow-hidden bg-gradient-to-br from-cream-50 via-white to-matcha-50">
+    <section className="relative min-h-[90vh] pt-32 flex items-center justify-center overflow-hidden bg-gradient-to-br from-cream-50 via-white to-matcha-50">
       <div className="absolute inset-0">
         <img
           src="https://images.pexels.com/photos/5946637/pexels-photo-5946637.jpeg?auto=compress&cs=tinysrgb&w=1920"
