@@ -19,12 +19,7 @@ export default function Hero() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-matcha-100/20 to-transparent rounded-full blur-2xl"></div>
 
       <div className="relative z-10 text-center max-w-5xl mx-auto px-4 animate-fade-in">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-full border border-matcha-200/50 mb-8 animate-slide-up">
-          <Sparkles className="h-4 w-4 text-matcha-600" />
-          <span className="text-sm font-medium text-charcoal-700">Morocco's First Premium Matcha Bar</span>
-        </div>
-
-        <h1 className="text-6xl md:text-8xl font-display font-bold text-charcoal-950 mb-6 leading-[1.1] animate-slide-up" style={{ animationDelay: '0.1s', letterSpacing: '-0.02em' }}>
+        <h1 className="text-6xl md:text-8xl font-display font-bold text-charcoal-950 mb-6 leading-[1.1] animate-slide-up" style={{ letterSpacing: '-0.02em' }}>
           Where Tradition
           <span className="block text-charcoal-950">Meets Excellence</span>
         </h1>
