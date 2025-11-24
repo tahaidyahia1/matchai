@@ -143,9 +143,16 @@ Deno.serve(async (req: Request) => {
         query = query.or(`email.ilike.%${search}%,full_name.ilike.%${search}%,phone.ilike.%${search}%`);
       }
 
-      const { data, error, count } = await query;
+      const { data: rawData, error, count } = await query;
 
       if (error) throw error;
+
+      const data = (rawData || []).map(user => ({
+        ...user,
+        loyalty_points: user.loyalty_points && user.loyalty_points.length > 0
+          ? user.loyalty_points
+          : [{ total_points: 0, lifetime_points: 0, tier: 'Green Member' }]
+      }));
 
       return new Response(
         JSON.stringify({ data, total: count, page, limit }),

@@ -531,12 +531,16 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4">
                         <span className="font-semibold text-gray-800">
-                          {customer.loyalty_points?.[0]?.total_points || 0}
+                          {Array.isArray(customer.loyalty_points) && customer.loyalty_points.length > 0
+                            ? customer.loyalty_points[0].total_points
+                            : 0}
                         </span>
                       </td>
                       <td className="px-6 py-4">
                         <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">
-                          {customer.loyalty_points?.[0]?.tier || 'N/A'}
+                          {Array.isArray(customer.loyalty_points) && customer.loyalty_points.length > 0
+                            ? customer.loyalty_points[0].tier
+                            : 'Green Member'}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-600">
