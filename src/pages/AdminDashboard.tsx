@@ -53,6 +53,22 @@ export default function AdminDashboard() {
   const [redemptions, setRedemptions] = useState<any[]>([]);
   const [promotions, setPromotions] = useState<any[]>([]);
   const [showPromotionForm, setShowPromotionForm] = useState(false);
+  const [rewardForm, setRewardForm] = useState({
+    name: '',
+    description: '',
+    pointsRequired: '',
+    category: 'drinks',
+    stockQuantity: '',
+  });
+  const [promotionForm, setPromotionForm] = useState({
+    name: '',
+    description: '',
+    type: 'points_multiplier',
+    value: '',
+    minPurchase: '',
+    startDate: '',
+    endDate: '',
+  });
   const [purchasePhone, setPurchasePhone] = useState('');
   const [purchaseCustomer, setPurchaseCustomer] = useState<Customer | null>(null);
   const [purchaseAmount, setPurchaseAmount] = useState('');
@@ -171,8 +187,8 @@ export default function AdminDashboard() {
     setPurchaseCustomer(null);
 
     try {
-      const allCustomers = await getAllCustomers();
-      const found = allCustomers.find(c => c.phone === purchasePhone);
+      const result = await getAllCustomers();
+      const found = result.data.find(c => c.phone === purchasePhone);
 
       if (found) {
         setPurchaseCustomer(found);
@@ -664,6 +680,126 @@ export default function AdminDashboard() {
                 </div>
               ))}
             </div>
+
+            {showRewardForm && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div className="bg-white rounded-xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+                  <h3 className="text-xl font-bold text-gray-800 mb-4">Create New Reward</h3>
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      setIsLoading(true);
+                      try {
+                        await createReward({
+                          name: rewardForm.name,
+                          description: rewardForm.description,
+                          pointsRequired: parseInt(rewardForm.pointsRequired),
+                          category: rewardForm.category,
+                          stockQuantity: rewardForm.stockQuantity ? parseInt(rewardForm.stockQuantity) : undefined,
+                        });
+                        setMessage('Reward created successfully');
+                        setShowRewardForm(false);
+                        setRewardForm({
+                          name: '',
+                          description: '',
+                          pointsRequired: '',
+                          category: 'drinks',
+                          stockQuantity: '',
+                        });
+                        await loadRewards();
+                      } catch (error: any) {
+                        setMessage(error.message || 'Failed to create reward');
+                      } finally {
+                        setIsLoading(false);
+                      }
+                    }}
+                    className="space-y-4"
+                  >
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Reward Name</label>
+                      <input
+                        type="text"
+                        value={rewardForm.name}
+                        onChange={(e) => setRewardForm({ ...rewardForm, name: e.target.value })}
+                        placeholder="e.g., Free Matcha Latte"
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                      <textarea
+                        value={rewardForm.description}
+                        onChange={(e) => setRewardForm({ ...rewardForm, description: e.target.value })}
+                        placeholder="Describe the reward..."
+                        required
+                        rows={3}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black resize-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                      <select
+                        value={rewardForm.category}
+                        onChange={(e) => setRewardForm({ ...rewardForm, category: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      >
+                        <option value="drinks">Drinks</option>
+                        <option value="food">Food</option>
+                        <option value="discounts">Discounts</option>
+                        <option value="merchandise">Merchandise</option>
+                        <option value="experiences">Experiences</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Points Required</label>
+                      <input
+                        type="number"
+                        value={rewardForm.pointsRequired}
+                        onChange={(e) => setRewardForm({ ...rewardForm, pointsRequired: e.target.value })}
+                        placeholder="e.g., 50"
+                        required
+                        min="1"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Stock Quantity (Optional)</label>
+                      <input
+                        type="number"
+                        value={rewardForm.stockQuantity}
+                        onChange={(e) => setRewardForm({ ...rewardForm, stockQuantity: e.target.value })}
+                        placeholder="Leave empty for unlimited"
+                        min="0"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      />
+                    </div>
+                    <div className="flex gap-3 pt-2">
+                      <Button type="submit" disabled={isLoading} className="flex-1">
+                        {isLoading ? 'Creating...' : 'Create Reward'}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setShowRewardForm(false);
+                          setRewardForm({
+                            name: '',
+                            description: '',
+                            pointsRequired: '',
+                            category: 'drinks',
+                            stockQuantity: '',
+                          });
+                        }}
+                        className="flex-1"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -808,6 +944,157 @@ export default function AdminDashboard() {
                 </div>
               ))}
             </div>
+
+            {showPromotionForm && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div className="bg-white rounded-xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+                  <h3 className="text-xl font-bold text-gray-800 mb-4">Create New Promotion</h3>
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      setIsLoading(true);
+                      try {
+                        await createPromotion({
+                          name: promotionForm.name,
+                          description: promotionForm.description,
+                          type: promotionForm.type,
+                          value: parseFloat(promotionForm.value),
+                          minPurchase: parseFloat(promotionForm.minPurchase),
+                          startDate: promotionForm.startDate,
+                          endDate: promotionForm.endDate,
+                        });
+                        setMessage('Promotion created successfully');
+                        setShowPromotionForm(false);
+                        setPromotionForm({
+                          name: '',
+                          description: '',
+                          type: 'points_multiplier',
+                          value: '',
+                          minPurchase: '',
+                          startDate: '',
+                          endDate: '',
+                        });
+                        await loadPromotions();
+                      } catch (error: any) {
+                        setMessage(error.message || 'Failed to create promotion');
+                      } finally {
+                        setIsLoading(false);
+                      }
+                    }}
+                    className="space-y-4"
+                  >
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Promotion Name</label>
+                      <input
+                        type="text"
+                        value={promotionForm.name}
+                        onChange={(e) => setPromotionForm({ ...promotionForm, name: e.target.value })}
+                        placeholder="e.g., Double Points Weekend"
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                      <textarea
+                        value={promotionForm.description}
+                        onChange={(e) => setPromotionForm({ ...promotionForm, description: e.target.value })}
+                        placeholder="Describe the promotion..."
+                        required
+                        rows={3}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black resize-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+                      <select
+                        value={promotionForm.type}
+                        onChange={(e) => setPromotionForm({ ...promotionForm, type: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      >
+                        <option value="points_multiplier">Points Multiplier</option>
+                        <option value="bonus_points">Bonus Points</option>
+                        <option value="discount">Discount</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Value {promotionForm.type === 'points_multiplier' ? '(e.g., 2 for 2x)' : promotionForm.type === 'discount' ? '(%)' : '(points)'}
+                      </label>
+                      <input
+                        type="number"
+                        value={promotionForm.value}
+                        onChange={(e) => setPromotionForm({ ...promotionForm, value: e.target.value })}
+                        placeholder={promotionForm.type === 'points_multiplier' ? '2' : promotionForm.type === 'discount' ? '10' : '50'}
+                        required
+                        min="1"
+                        step="0.1"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Minimum Purchase (MAD)</label>
+                      <input
+                        type="number"
+                        value={promotionForm.minPurchase}
+                        onChange={(e) => setPromotionForm({ ...promotionForm, minPurchase: e.target.value })}
+                        placeholder="e.g., 100"
+                        required
+                        min="0"
+                        step="0.01"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                        <input
+                          type="date"
+                          value={promotionForm.startDate}
+                          onChange={(e) => setPromotionForm({ ...promotionForm, startDate: e.target.value })}
+                          required
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                        <input
+                          type="date"
+                          value={promotionForm.endDate}
+                          onChange={(e) => setPromotionForm({ ...promotionForm, endDate: e.target.value })}
+                          required
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex gap-3 pt-2">
+                      <Button type="submit" disabled={isLoading} className="flex-1">
+                        {isLoading ? 'Creating...' : 'Create Promotion'}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setShowPromotionForm(false);
+                          setPromotionForm({
+                            name: '',
+                            description: '',
+                            type: 'points_multiplier',
+                            value: '',
+                            minPurchase: '',
+                            startDate: '',
+                            endDate: '',
+                          });
+                        }}
+                        className="flex-1"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
