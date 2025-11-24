@@ -25,7 +25,7 @@ export default function Hero() {
         </h1>
 
         <p className="text-xl md:text-2xl text-charcoal-600 mb-10 max-w-3xl mx-auto leading-relaxed font-light animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          Experience the art of Japanese matcha, ceremonially whisked and thoughtfully crafted in the heart of Rabat.
+        Discover the place where matcha and community comes together.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up" style={{ animationDelay: '0.3s' }}>
