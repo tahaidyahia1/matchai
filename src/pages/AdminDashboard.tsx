@@ -90,6 +90,8 @@ export default function AdminDashboard() {
         getDashboardStats(),
         getAllCustomers(),
       ]);
+      console.log('Loaded customers data:', customersData);
+      console.log('Customers array:', customersData.data);
       setStats(statsData);
       setCustomers(customersData.data);
     } catch (error) {

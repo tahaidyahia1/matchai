@@ -147,12 +147,22 @@ Deno.serve(async (req: Request) => {
 
       if (error) throw error;
 
-      const data = (rawData || []).map(user => ({
-        ...user,
-        loyalty_points: user.loyalty_points && user.loyalty_points.length > 0
+      console.log('Raw customer data:', JSON.stringify(rawData, null, 2));
+
+      const data = (rawData || []).map(user => {
+        const loyaltyPoints = user.loyalty_points && Array.isArray(user.loyalty_points) && user.loyalty_points.length > 0
           ? user.loyalty_points
-          : [{ total_points: 0, lifetime_points: 0, tier: 'Green Member' }]
-      }));
+          : [{ total_points: 0, lifetime_points: 0, tier: 'Green Member' }];
+
+        console.log(`User ${user.full_name} loyalty_points:`, loyaltyPoints);
+
+        return {
+          ...user,
+          loyalty_points: loyaltyPoints
+        };
+      });
+
+      console.log('Processed customer data:', JSON.stringify(data, null, 2));
 
       return new Response(
         JSON.stringify({ data, total: count, page, limit }),
