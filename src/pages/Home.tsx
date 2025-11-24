@@ -30,8 +30,8 @@ export default function Home() {
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-matcha-100/50 rounded-full mb-6">
                 <span className="text-sm font-semibold text-matcha-800">Est. 2024</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-display font-bold text-charcoal-950 mb-6 leading-tight">
-                Welcome to Matchai
+              <h2 className="text-4xl md:text-5xl font-black text-charcoal-950 mb-6 leading-tight tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
+                Welcome to MATCHAI
               </h2>
               <p className="text-lg text-charcoal-600 leading-relaxed mb-6 font-light">
                 Morocco's pioneering matcha bar, where centuries-old Japanese tradition meets contemporary elegance. Every cup is ceremonially whisked before your eyes, transforming premium matcha into a moment of zen.
@@ -52,8 +52,8 @@ export default function Home() {
       <section className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-20 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-charcoal-950 mb-6">
-              The Matchai Difference
+            <h2 className="text-4xl md:text-5xl font-black text-charcoal-950 mb-6 tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
+              The MATCHAI Difference
             </h2>
             <p className="text-xl text-charcoal-600 max-w-3xl mx-auto font-light">
               Where authenticity, craftsmanship, and community converge to create an unparalleled matcha experience
@@ -110,7 +110,7 @@ export default function Home() {
             Begin Your Matcha Journey
           </h2>
           <p className="text-xl md:text-2xl text-cream-100 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
-            Discover why discerning matcha lovers across Morocco choose Matchai for their daily ritual
+            Discover why discerning matcha lovers across Morocco choose MATCHAI for their daily ritual
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Link to="/menu">
