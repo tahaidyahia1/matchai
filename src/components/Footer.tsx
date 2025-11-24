@@ -104,7 +104,7 @@ export default function Footer() {
             <div className="flex items-center gap-2 text-cream-400 text-xs">
               <span className="px-3 py-1.5 bg-charcoal-800 rounded-full">Premium Matcha</span>
               <span className="px-3 py-1.5 bg-charcoal-800 rounded-full">Rabat Agdal</span>
-              <span className="px-3 py-1.5 bg-charcoal-800 rounded-full">Est. 2024</span>
+              <span className="px-3 py-1.5 bg-charcoal-800 rounded-full">Est. 2025</span>
             </div>
           </div>
         </div>
