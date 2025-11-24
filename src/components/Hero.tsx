@@ -8,9 +8,9 @@ export default function Hero() {
     <section className="relative min-h-[90vh] pt-16 flex items-center justify-center overflow-hidden bg-gradient-to-br from-cream-50 via-white to-matcha-50">
       <div className="absolute inset-0">
         <img
-          src="https://images.pexels.com/photos/5946075/pexels-photo-5946075.jpeg?auto=compress&cs=tinysrgb&w=1920"
-          alt="Premium matcha preparation"
-          className="w-full h-full object-cover opacity-[0.08]"
+          src="https://images.pexels.com/photos/5946637/pexels-photo-5946637.jpeg?auto=compress&cs=tinysrgb&w=1920"
+          alt="Premium matcha powder and whisk"
+          className="w-full h-full object-cover opacity-[0.12]"
         />
       </div>
 
@@ -24,9 +24,9 @@ export default function Hero() {
           <span className="text-sm font-medium text-charcoal-700">Morocco's First Premium Matcha Bar</span>
         </div>
 
-        <h1 className="text-6xl md:text-8xl font-display font-bold text-charcoal-950 mb-6 tracking-tight leading-[1.1] animate-slide-up" style={{ animationDelay: '0.1s' }}>
+        <h1 className="text-6xl md:text-8xl font-display font-bold text-charcoal-950 mb-6 leading-[1.1] animate-slide-up" style={{ animationDelay: '0.1s', letterSpacing: '-0.02em' }}>
           Where Tradition
-          <span className="block bg-gradient-to-r from-matcha-600 to-matcha-500 bg-clip-text text-transparent">Meets Excellence</span>
+          <span className="block text-charcoal-950">Meets Excellence</span>
         </h1>
 
         <p className="text-xl md:text-2xl text-charcoal-600 mb-10 max-w-3xl mx-auto leading-relaxed font-light animate-slide-up" style={{ animationDelay: '0.2s' }}>

@@ -14,8 +14,8 @@ export default function Footer() {
         <div className="grid md:grid-cols-12 gap-12 mb-16">
           <div className="md:col-span-5">
             <div className="flex items-center space-x-2 mb-6">
-              <span className="text-4xl font-display font-bold text-white">
-                MATCHA<span className="bg-gradient-to-r from-matcha-400 to-matcha-500 bg-clip-text text-transparent">I</span>
+              <span className="text-4xl font-black text-white tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
+                MATCHAI
               </span>
             </div>
             <p className="text-cream-200 mb-8 max-w-md leading-relaxed font-light text-lg">

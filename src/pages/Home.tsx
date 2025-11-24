@@ -16,8 +16,8 @@ export default function Home() {
             <div className="relative order-2 lg:order-1">
               <div className="aspect-[4/5] bg-gradient-to-br from-matcha-100 to-cream-200 rounded-3xl overflow-hidden premium-shadow hover-lift">
                 <img
-                  src="https://images.pexels.com/photos/5946637/pexels-photo-5946637.jpeg?auto=compress&cs=tinysrgb&w=1200"
-                  alt="Matchai signature drinks with layered matcha"
+                  src="https://images.pexels.com/photos/5946704/pexels-photo-5946704.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                  alt="Premium matcha latte with beautiful foam art"
                   className="w-full h-full object-cover"
                 />
               </div>
