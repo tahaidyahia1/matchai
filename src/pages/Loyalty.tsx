@@ -623,7 +623,7 @@ export default function Loyalty() {
               <Button
                 onClick={() =>
                   window.open(
-                    'https://form.passquare.com/vBH60q2gQOAc_2D1J8AhYtHv2hGwUHg8TY9Tb88uV5EE2IyBeAFVwzx-SYqRMNDyzEw4z9LCZxHZs0UeiaQOiQWmjmdsI2HN-EXU5Qu2ypD32s8rJgN7Q2aupN5YXpMUIwpwdTbcJP_4U6Fq14kQbF6jIt0rivvMDXhw7iS3XpxENcQfbwH1gZwUOkb2H3Eeuv2qMapujasbaYLjilzJ67logvPSwASDVCxG3hA2hPdPnyKEdAmDYtknkHlxzhdoEd8b0r4QKq_Zl8AB-pIL84QqPwKwv80sev7Bwzxh-aJJPVQXCh8dq-ZpXPiQyF4c',
+                    'https://form.passquare.com/ap_6ba5bd1c75fad102fea3162030e5367eacd60d5c37a5ad44',
                     '_blank'
                   )
                 }
