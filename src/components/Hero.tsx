@@ -20,8 +20,8 @@ export default function Hero() {
 
       <div className="relative z-10 text-center max-w-5xl mx-auto px-4 animate-fade-in">
         <h1 className="text-6xl md:text-8xl font-display font-bold text-charcoal-950 mb-6 leading-[1.1] animate-slide-up" style={{ letterSpacing: '-0.02em' }}>
-          Where Tradition
-          <span className="block text-charcoal-950">Meets Excellence</span>
+         Matchai
+          <span className="block text-charcoal-950"></span>
         </h1>
 
         <p className="text-xl md:text-2xl text-charcoal-600 mb-10 max-w-3xl mx-auto leading-relaxed font-light animate-slide-up" style={{ animationDelay: '0.2s' }}>
