@@ -23,7 +23,7 @@ export default function Menu() {
             <Sparkles className="h-4 w-4 text-matcha-600" />
             <span className="text-sm font-medium text-charcoal-700">Ceremonially Crafted</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-display font-bold text-charcoal-950 mb-8 animate-fade-in">
+          <h1 className="text-5xl md:text-7xl font-black text-charcoal-950 mb-8 animate-fade-in tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
             Our Menu
           </h1>
           <p className="text-xl md:text-2xl text-charcoal-600 max-w-3xl mx-auto font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.1s' }}>
