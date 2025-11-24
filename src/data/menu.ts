@@ -6,7 +6,8 @@ export const menuItems: MenuItem[] = [
     name: 'Rouge Cloud',
     description: 'Smooth and creamy, the perfect balance',
     prices: { small: 60, big: 75 },
-    category: 'drink'
+    category: 'drink',
+    image: '/gemini.jpg'
   },
   {
     id: 'pistachio-dream',

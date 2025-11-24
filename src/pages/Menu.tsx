@@ -44,9 +44,9 @@ export default function Menu() {
               <div key={item.id} className="group animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
                 <div className="bg-white rounded-3xl premium-shadow hover-lift overflow-hidden border border-cream-200">
                   <div className="aspect-[16/12] bg-gradient-to-br from-matcha-100 to-cream-200 relative overflow-hidden">
-                    {item.id === 'rouge-cloud' ? (
+                    {item.image ? (
                       <img
-                        src="https://images.pexels.com/photos/5946637/pexels-photo-5946637.jpeg?auto=compress&cs=tinysrgb&w=800"
+                        src={item.image}
                         alt={item.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       />
