@@ -14,7 +14,8 @@ export const menuItems: MenuItem[] = [
     name: 'Pistachio Dream',
     description: 'Refreshing with natural energy',
     prices: { small: 75, big: 85 },
-    category: 'drink'
+    category: 'drink',
+    image: '/geminiii.jpg'
   },
   {
     id: 'vanilla-nine',
