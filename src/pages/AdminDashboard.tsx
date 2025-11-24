@@ -15,6 +15,7 @@ import {
   Calendar,
   FileText,
   Settings,
+  Trash2,
 } from 'lucide-react';
 import Button from '../components/Button';
 import { useAdmin } from '../context/AdminContext';
@@ -30,6 +31,7 @@ import {
   getAllPromotions,
   createPromotion,
   updatePromotion,
+  deleteCustomer,
   Customer,
   DashboardStats,
 } from '../services/adminService';
@@ -238,6 +240,23 @@ export default function AdminDashboard() {
   const handleSignOut = () => {
     signOut();
     navigate('/admin/login');
+  };
+
+  const handleDeleteCustomer = async (customer: Customer) => {
+    if (!window.confirm(`Are you sure you want to delete ${customer.full_name}? This action cannot be undone and will remove all their data including loyalty points and transaction history.`)) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await deleteCustomer(customer.id);
+      setMessage(`Customer ${customer.full_name} has been deleted successfully`);
+      await loadDashboardData();
+    } catch (error: any) {
+      setMessage(`Failed to delete customer: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const filteredCustomers = customers.filter(
@@ -551,12 +570,21 @@ export default function AdminDashboard() {
                         {new Date(customer.created_at).toLocaleDateString()}
                       </td>
                       <td className="px-3 sm:px-6 py-4">
-                        <button
-                          onClick={() => setSelectedCustomer(customer)}
-                          className="text-green-600 hover:text-green-700 font-medium text-xs sm:text-sm whitespace-nowrap"
-                        >
-                          Add Purchase
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => setSelectedCustomer(customer)}
+                            className="text-green-600 hover:text-green-700 font-medium text-xs sm:text-sm whitespace-nowrap"
+                          >
+                            Add Purchase
+                          </button>
+                          <button
+                            onClick={() => handleDeleteCustomer(customer)}
+                            className="text-red-600 hover:text-red-700 p-1"
+                            title="Delete customer"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

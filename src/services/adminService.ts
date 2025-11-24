@@ -352,3 +352,22 @@ export async function getAuditLogs(page: number = 1, limit: number = 50) {
 
   return result;
 }
+
+export async function deleteCustomer(userId: string): Promise<void> {
+  const adminId = localStorage.getItem('adminId');
+
+  const response = await fetch(`${API_URL}/functions/v1/admin-operations`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      action: 'delete-customer',
+      adminId,
+      userId,
+    }),
+  });
+
+  const result = await response.json();
+  if (result.error) throw new Error(result.error);
+}

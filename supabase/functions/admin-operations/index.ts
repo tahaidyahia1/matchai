@@ -698,6 +698,48 @@ Deno.serve(async (req: Request) => {
       );
     }
 
+    if (action === 'delete-customer') {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
+        throw new Error('Admin authentication required');
+      }
+
+      const { userId } = body;
+
+      const { data: userData } = await supabase
+        .from('users')
+        .select('full_name, email')
+        .eq('id', userId)
+        .maybeSingle();
+
+      const { error } = await supabase
+        .from('users')
+        .delete()
+        .eq('id', userId);
+
+      if (error) throw error;
+
+      await logAdminAction(
+        supabase,
+        adminId,
+        'delete_customer',
+        'user',
+        userId,
+        { user: userData },
+        ipAddress
+      );
+
+      return new Response(
+        JSON.stringify({ success: true }),
+        {
+          headers: {
+            ...corsHeaders,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+    }
+
     throw new Error('Invalid action');
   } catch (error) {
     console.error('Error in admin-operations function:', error);
