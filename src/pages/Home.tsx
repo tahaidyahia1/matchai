@@ -28,7 +28,6 @@ export default function Home() {
             </div>
             <div className="order-1 lg:order-2 animate-fade-in">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-matcha-100/50 rounded-full mb-6">
-                <Sparkles className="h-4 w-4 text-matcha-700" />
                 <span className="text-sm font-semibold text-matcha-800">Est. 2024</span>
               </div>
               <h2 className="text-4xl md:text-5xl font-display font-bold text-charcoal-950 mb-6 leading-tight">
