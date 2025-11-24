@@ -4,6 +4,7 @@ import Button from '../components/Button';
 import { useAuth } from '../context/AuthContext';
 import AuthModal from '../components/AuthModal';
 import { getPointsTransactions, addPointsForPurchase, lookupPointsByPhone } from '../services/loyaltyService';
+import { getActiveRewards, redeemReward, getUserRedemptions, Reward, Redemption } from '../services/rewardsService';
 
 interface Transaction {
   id: string;
@@ -27,6 +28,12 @@ export default function Loyalty() {
   const [lookupPhone, setLookupPhone] = useState('');
   const [lookupResult, setLookupResult] = useState<any>(null);
   const [lookupError, setLookupError] = useState('');
+  const [rewards, setRewards] = useState<Reward[]>([]);
+  const [userRedemptions, setUserRedemptions] = useState<Redemption[]>([]);
+  const [showRewards, setShowRewards] = useState(false);
+  const [showRedemptions, setShowRedemptions] = useState(false);
+  const [selectedReward, setSelectedReward] = useState<Reward | null>(null);
+  const [redemptionMessage, setRedemptionMessage] = useState('');
 
   useEffect(() => {
     if (user && showTransactions) {
@@ -89,6 +96,62 @@ export default function Loyalty() {
     } catch (error: any) {
       setLookupError(error.message || 'Unable to find account with this phone number');
       console.error('Lookup error:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const loadRewards = async () => {
+    try {
+      const data = await getActiveRewards();
+      setRewards(data);
+    } catch (error) {
+      console.error('Failed to load rewards:', error);
+    }
+  };
+
+  const loadUserRedemptions = async () => {
+    if (user) {
+      try {
+        const data = await getUserRedemptions(user.id);
+        setUserRedemptions(data);
+      } catch (error) {
+        console.error('Failed to load redemptions:', error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (user && showRewards) {
+      loadRewards();
+    }
+  }, [user, showRewards]);
+
+  useEffect(() => {
+    if (user && showRedemptions) {
+      loadUserRedemptions();
+    }
+  }, [user, showRedemptions]);
+
+  const handleRedeemReward = async (reward: Reward) => {
+    if (!user || !loyaltyData) return;
+
+    if (loyaltyData.total_points < reward.points_required) {
+      setRedemptionMessage(`You need ${reward.points_required} points but only have ${loyaltyData.total_points}`);
+      return;
+    }
+
+    setIsProcessing(true);
+    setRedemptionMessage('');
+
+    try {
+      const result = await redeemReward(user.id, reward.id);
+      setRedemptionMessage(`Success! Your redemption code is: ${result.redemption.redemption_code}. Show this code at the store.`);
+      setSelectedReward(null);
+      await refreshLoyaltyData();
+      await loadUserRedemptions();
+    } catch (error: any) {
+      setRedemptionMessage(error.message || 'Failed to redeem reward');
     } finally {
       setIsProcessing(false);
     }
@@ -159,11 +222,25 @@ export default function Loyalty() {
                 <span>Record Purchase</span>
               </button>
               <button
+                onClick={() => setShowRewards(!showRewards)}
+                className="flex items-center space-x-2 px-4 py-2 bg-white bg-opacity-10 hover:bg-opacity-20 rounded-lg transition-colors"
+              >
+                <Gift className="h-4 w-4" />
+                <span>{showRewards ? 'Hide' : 'Browse'} Rewards</span>
+              </button>
+              <button
+                onClick={() => setShowRedemptions(!showRedemptions)}
+                className="flex items-center space-x-2 px-4 py-2 bg-white bg-opacity-10 hover:bg-opacity-20 rounded-lg transition-colors"
+              >
+                <Award className="h-4 w-4" />
+                <span>{showRedemptions ? 'Hide' : 'My'} Redemptions</span>
+              </button>
+              <button
                 onClick={() => setShowTransactions(!showTransactions)}
                 className="flex items-center space-x-2 px-4 py-2 bg-white bg-opacity-10 hover:bg-opacity-20 rounded-lg transition-colors"
               >
                 <History className="h-4 w-4" />
-                <span>{showTransactions ? 'Hide' : 'View'} Transaction History</span>
+                <span>{showTransactions ? 'Hide' : 'View'} History</span>
               </button>
             </div>
 
@@ -219,6 +296,78 @@ export default function Loyalty() {
               </div>
             )}
 
+            {showRewards && (
+              <div className="mt-6 bg-white bg-opacity-10 rounded-2xl p-6">
+                <h3 className="text-xl font-bold mb-4">Available Rewards</h3>
+                {redemptionMessage && (
+                  <div className={`mb-4 p-3 rounded-lg ${redemptionMessage.includes('Success') ? 'bg-green-500 bg-opacity-20 text-green-100' : 'bg-red-500 bg-opacity-20 text-red-100'}`}>
+                    {redemptionMessage}
+                  </div>
+                )}
+                <div className="grid md:grid-cols-2 gap-4">
+                  {rewards.map((reward) => (
+                    <div key={reward.id} className="bg-white bg-opacity-10 rounded-xl p-4">
+                      <h4 className="font-bold text-lg mb-2">{reward.name}</h4>
+                      <p className="text-sm text-gray-300 mb-3">{reward.description}</p>
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold text-lg">{reward.points_required} pts</span>
+                        <button
+                          onClick={() => setSelectedReward(reward)}
+                          disabled={loyaltyData && loyaltyData.total_points < reward.points_required}
+                          className={`px-4 py-2 rounded-lg transition-colors ${
+                            loyaltyData && loyaltyData.total_points >= reward.points_required
+                              ? 'bg-green-600 hover:bg-green-700 text-white'
+                              : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                          }`}
+                        >
+                          {loyaltyData && loyaltyData.total_points >= reward.points_required ? 'Redeem' : 'Not enough pts'}
+                        </button>
+                      </div>
+                      {reward.stock_quantity !== null && (
+                        <div className="mt-2 text-xs text-gray-400">
+                          {reward.stock_quantity > 0 ? `${reward.stock_quantity} available` : 'Out of stock'}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {showRedemptions && (
+              <div className="mt-6 bg-white bg-opacity-10 rounded-2xl p-6">
+                <h3 className="text-xl font-bold mb-4">My Redemptions</h3>
+                <div className="space-y-3">
+                  {userRedemptions.length === 0 ? (
+                    <p className="text-gray-300">No redemptions yet</p>
+                  ) : (
+                    userRedemptions.map((redemption) => (
+                      <div key={redemption.id} className="bg-white bg-opacity-10 rounded-lg p-4">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <div className="font-bold">{redemption.rewards_catalog?.name}</div>
+                            <div className="text-sm text-gray-300">
+                              Code: <span className="font-mono bg-black bg-opacity-30 px-2 py-1 rounded">{redemption.redemption_code}</span>
+                            </div>
+                          </div>
+                          <span className={`px-3 py-1 text-xs font-medium rounded-full ${
+                            redemption.status === 'pending' ? 'bg-yellow-500 bg-opacity-20 text-yellow-200' :
+                            redemption.status === 'approved' ? 'bg-blue-500 bg-opacity-20 text-blue-200' :
+                            'bg-green-500 bg-opacity-20 text-green-200'
+                          }`}>
+                            {redemption.status}
+                          </span>
+                        </div>
+                        <div className="text-sm text-gray-400">
+                          {new Date(redemption.created_at).toLocaleDateString()} • {redemption.points_spent} points
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+
             {showTransactions && transactions.length > 0 && (
               <div className="mt-6 bg-white bg-opacity-10 rounded-2xl p-6">
                 <h3 className="text-xl font-bold mb-4">Recent Transactions</h3>
@@ -236,6 +385,33 @@ export default function Loyalty() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {selectedReward && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div className="bg-white rounded-xl p-6 max-w-md w-full">
+                  <h3 className="text-xl font-bold text-gray-800 mb-4">Confirm Redemption</h3>
+                  <p className="text-gray-600 mb-4">
+                    Are you sure you want to redeem <strong>{selectedReward.name}</strong> for{' '}
+                    <strong>{selectedReward.points_required} points</strong>?
+                  </p>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => handleRedeemReward(selectedReward)}
+                      disabled={isProcessing}
+                      className="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors disabled:opacity-50"
+                    >
+                      {isProcessing ? 'Processing...' : 'Confirm'}
+                    </button>
+                    <button
+                      onClick={() => setSelectedReward(null)}
+                      className="flex-1 px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
