@@ -255,10 +255,10 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
-              <h1 className="text-2xl font-black text-gray-800 tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>MATCHAI Admin</h1>
-              <p className="text-sm text-gray-600">Welcome, {admin.full_name}</p>
+              <h1 className="text-xl sm:text-2xl font-black text-gray-800 tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>MATCHAI Admin</h1>
+              <p className="text-xs sm:text-sm text-gray-600">Welcome, {admin.full_name}</p>
             </div>
             <Button
               variant="outline"
@@ -285,14 +285,14 @@ export default function AdminDashboard() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as Tab)}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors flex-1 justify-center ${
+              className={`flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-4 py-2 rounded-lg transition-colors flex-shrink-0 justify-center ${
                 activeTab === tab.id
                   ? 'bg-black text-white'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
               <tab.icon className="h-4 w-4" />
-              <span className="font-medium">{tab.label}</span>
+              <span className="font-medium text-xs sm:text-sm whitespace-nowrap">{tab.label}</span>
             </button>
           ))}
         </div>
@@ -500,23 +500,23 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <table className="w-full">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden overflow-x-auto">
+              <table className="w-full min-w-[640px]">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Customer
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Points
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Tier
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Joined
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Actions
                     </th>
                   </tr>
@@ -524,36 +524,36 @@ export default function AdminDashboard() {
                 <tbody className="divide-y divide-gray-200">
                   {filteredCustomers.map((customer) => (
                     <tr key={customer.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4">
+                      <td className="px-3 sm:px-6 py-4">
                         <div>
-                          <div className="font-medium text-gray-800">{customer.full_name}</div>
-                          <div className="text-sm text-gray-600">{customer.email}</div>
+                          <div className="font-medium text-gray-800 text-sm">{customer.full_name}</div>
+                          <div className="text-xs sm:text-sm text-gray-600">{customer.email}</div>
                           {customer.phone && (
-                            <div className="text-sm text-gray-500">{customer.phone}</div>
+                            <div className="text-xs sm:text-sm text-gray-500">{customer.phone}</div>
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <span className="font-semibold text-gray-800">
+                      <td className="px-3 sm:px-6 py-4">
+                        <span className="font-semibold text-gray-800 text-sm">
                           {Array.isArray(customer.loyalty_points) && customer.loyalty_points.length > 0
                             ? customer.loyalty_points[0].total_points
                             : 0}
                         </span>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 sm:px-6 py-4">
                         <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">
                           {Array.isArray(customer.loyalty_points) && customer.loyalty_points.length > 0
                             ? customer.loyalty_points[0].tier
                             : 'Green Member'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-3 sm:px-6 py-4 text-xs sm:text-sm text-gray-600">
                         {new Date(customer.created_at).toLocaleDateString()}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 sm:px-6 py-4">
                         <button
                           onClick={() => setSelectedCustomer(customer)}
-                          className="text-green-600 hover:text-green-700 font-medium text-sm"
+                          className="text-green-600 hover:text-green-700 font-medium text-xs sm:text-sm whitespace-nowrap"
                         >
                           Add Purchase
                         </button>
@@ -815,26 +815,26 @@ export default function AdminDashboard() {
           <div>
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Pending Redemptions</h2>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <table className="w-full">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden overflow-x-auto">
+              <table className="w-full min-w-[640px]">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Customer
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Reward
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Code
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Date
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Actions
                     </th>
                   </tr>
@@ -842,7 +842,7 @@ export default function AdminDashboard() {
                 <tbody className="divide-y divide-gray-200">
                   {redemptions.map((redemption) => (
                     <tr key={redemption.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4">
+                      <td className="px-3 sm:px-6 py-4">
                         <div>
                           <div className="font-medium text-gray-800">
                             {redemption.users?.full_name}
