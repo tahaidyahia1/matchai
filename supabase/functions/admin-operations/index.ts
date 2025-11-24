@@ -101,6 +101,20 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'get-all-customers') {
+      if (!adminId) {
+        throw new Error('Admin authentication required');
+      }
+
+      const { data: adminCheck } = await supabase
+        .from('admin_users')
+        .select('id, is_active')
+        .eq('id', adminId)
+        .maybeSingle();
+
+      if (!adminCheck || !adminCheck.is_active) {
+        throw new Error('Invalid or inactive admin account');
+      }
+
       const { page = 1, limit = 50, search = '' } = body;
       const offset = (page - 1) * limit;
 
