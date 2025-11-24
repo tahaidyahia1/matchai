@@ -116,16 +116,16 @@ export default function Menu() {
         </div>
       </section>
 
-      <section className="py-24 bg-gradient-to-br from-matcha-600 to-matcha-700 relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute top-0 left-0 w-96 h-96 bg-gray-300 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gray-200 rounded-full blur-3xl"></div>
         </div>
         <div className="max-w-4xl mx-auto text-center px-4 relative z-10">
-          <h2 className="text-4xl md:text-6xl font-display font-bold text-white mb-8">
+          <h2 className="text-4xl md:text-6xl font-black text-gray-800 mb-8 tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
             Craving Matcha?
           </h2>
-          <p className="text-xl md:text-2xl text-matcha-50 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
             Visit us in Agdal or place your order for pickup
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
@@ -139,7 +139,7 @@ export default function Menu() {
             <Button
               variant="outline"
               size="lg"
-              className="border-white text-white hover:bg-white hover:text-matcha-700"
+              className="border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white"
               onClick={() => window.location.href = '/contact'}
             >
               Visit Us
