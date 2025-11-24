@@ -155,12 +155,14 @@ Your loyalty system is now fully operational with:
 
 ### When a Customer Makes a Purchase
 1. Log in to admin dashboard
-2. Go to "Customers" tab
-3. Search for customer (by name, email, or phone)
-4. Click "Add Purchase" button
-5. Enter the purchase amount in MAD (e.g., 150 MAD)
-6. System automatically calculates points (150 MAD = 15 points)
-7. Click "Confirm" - Points added instantly to customer account!
+2. Click "Add Purchase" tab (green plus icon)
+3. Enter customer's phone number
+4. Click "Search Customer"
+5. Customer info appears (name, email, current points, tier)
+6. Enter purchase amount in MAD (e.g., 150 MAD)
+7. System shows: "Customer will earn: 15 points"
+8. Click "Confirm Purchase"
+9. Done! Points added instantly to customer account!
 
 ### When a Customer Wants to Redeem
 1. Customer signs in to their account

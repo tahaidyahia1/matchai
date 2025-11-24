@@ -34,7 +34,7 @@ import {
   DashboardStats,
 } from '../services/adminService';
 
-type Tab = 'overview' | 'customers' | 'rewards' | 'redemptions' | 'promotions';
+type Tab = 'overview' | 'purchase' | 'customers' | 'rewards' | 'redemptions' | 'promotions';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -53,6 +53,11 @@ export default function AdminDashboard() {
   const [redemptions, setRedemptions] = useState<any[]>([]);
   const [promotions, setPromotions] = useState<any[]>([]);
   const [showPromotionForm, setShowPromotionForm] = useState(false);
+  const [purchasePhone, setPurchasePhone] = useState('');
+  const [purchaseCustomer, setPurchaseCustomer] = useState<Customer | null>(null);
+  const [purchaseAmount, setPurchaseAmount] = useState('');
+  const [purchaseNotes, setPurchaseNotes] = useState('');
+  const [purchaseMessage, setPurchaseMessage] = useState('');
 
   useEffect(() => {
     if (!admin) {
@@ -157,6 +162,59 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleSearchCustomer = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!purchasePhone) return;
+
+    setIsLoading(true);
+    setPurchaseMessage('');
+    setPurchaseCustomer(null);
+
+    try {
+      const allCustomers = await getAllCustomers();
+      const found = allCustomers.find(c => c.phone === purchasePhone);
+
+      if (found) {
+        setPurchaseCustomer(found);
+        setPurchaseMessage('');
+      } else {
+        setPurchaseMessage('Customer not found. Please check the phone number or ask customer to sign up first.');
+      }
+    } catch (error: any) {
+      setPurchaseMessage('Error searching for customer');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddPurchase = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!purchaseCustomer || !purchaseAmount) return;
+
+    setIsLoading(true);
+    setPurchaseMessage('');
+
+    try {
+      const amount = parseFloat(purchaseAmount);
+      const points = Math.floor(amount / 10);
+      const reason = purchaseNotes || `Purchase: ${amount} MAD`;
+
+      await adjustPoints(purchaseCustomer.id, points, reason);
+      setPurchaseMessage(`✅ Success! Added ${points} points for ${amount} MAD purchase`);
+
+      setPurchaseAmount('');
+      setPurchaseNotes('');
+      setPurchasePhone('');
+      setPurchaseCustomer(null);
+
+      await loadDashboardData();
+    } catch (error: any) {
+      setPurchaseMessage(`❌ Failed to add points: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSignOut = () => {
     signOut();
     navigate('/admin/login');
@@ -195,9 +253,10 @@ export default function AdminDashboard() {
       </nav>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex space-x-1 mb-8 bg-white p-1 rounded-lg shadow-sm">
+        <div className="flex space-x-1 mb-8 bg-white p-1 rounded-lg shadow-sm overflow-x-auto">
           {[
             { id: 'overview', label: 'Overview', icon: TrendingUp },
+            { id: 'purchase', label: 'Add Purchase', icon: Plus },
             { id: 'customers', label: 'Customers', icon: Users },
             { id: 'rewards', label: 'Rewards', icon: Gift },
             { id: 'redemptions', label: 'Redemptions', icon: Award },
@@ -266,6 +325,142 @@ export default function AdminDashboard() {
                   <div>Gold: {stats.tierDistribution['Gold VIP'] || 0}</div>
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'purchase' && (
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Add Purchase</h2>
+              <p className="text-gray-600 mb-6">Search for customer by phone number and add points for their purchase</p>
+
+              {!purchaseCustomer ? (
+                <form onSubmit={handleSearchCustomer} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Customer Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      value={purchasePhone}
+                      onChange={(e) => setPurchasePhone(e.target.value)}
+                      placeholder="e.g., 0612345678"
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Enter the customer's phone number to search
+                    </p>
+                  </div>
+
+                  {purchaseMessage && (
+                    <div className={`p-3 rounded-lg ${purchaseMessage.includes('✅') ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
+                      {purchaseMessage}
+                    </div>
+                  )}
+
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    icon={Search}
+                  >
+                    {isLoading ? 'Searching...' : 'Search Customer'}
+                  </Button>
+                </form>
+              ) : (
+                <div className="space-y-6">
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-bold text-gray-800">Customer Found</h3>
+                      <button
+                        onClick={() => {
+                          setPurchaseCustomer(null);
+                          setPurchasePhone('');
+                          setPurchaseAmount('');
+                          setPurchaseNotes('');
+                          setPurchaseMessage('');
+                        }}
+                        className="text-sm text-gray-600 hover:text-gray-800"
+                      >
+                        Search Different Customer
+                      </button>
+                    </div>
+                    <div className="space-y-1 text-sm">
+                      <p><strong>Name:</strong> {purchaseCustomer.full_name}</p>
+                      <p><strong>Email:</strong> {purchaseCustomer.email}</p>
+                      <p><strong>Phone:</strong> {purchaseCustomer.phone}</p>
+                      <p><strong>Current Points:</strong> {purchaseCustomer.loyalty_points?.[0]?.total_points || 0}</p>
+                      <p><strong>Tier:</strong> {purchaseCustomer.loyalty_points?.[0]?.tier || 'N/A'}</p>
+                    </div>
+                  </div>
+
+                  <form onSubmit={handleAddPurchase} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Purchase Amount (MAD)
+                      </label>
+                      <input
+                        type="number"
+                        value={purchaseAmount}
+                        onChange={(e) => setPurchaseAmount(e.target.value)}
+                        placeholder="e.g., 150"
+                        required
+                        min="1"
+                        step="0.01"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      />
+                      {purchaseAmount && (
+                        <p className="text-sm font-medium text-green-600 mt-2">
+                          Customer will earn: {Math.floor(parseFloat(purchaseAmount) / 10)} points
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Notes (Optional)
+                      </label>
+                      <textarea
+                        value={purchaseNotes}
+                        onChange={(e) => setPurchaseNotes(e.target.value)}
+                        placeholder="Add any additional notes..."
+                        rows={2}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black resize-none"
+                      />
+                    </div>
+
+                    {purchaseMessage && (
+                      <div className={`p-3 rounded-lg ${purchaseMessage.includes('✅') ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
+                        {purchaseMessage}
+                      </div>
+                    )}
+
+                    <div className="flex gap-3">
+                      <Button
+                        type="submit"
+                        disabled={isLoading || !purchaseAmount}
+                        icon={Check}
+                      >
+                        {isLoading ? 'Processing...' : 'Confirm Purchase'}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setPurchaseCustomer(null);
+                          setPurchasePhone('');
+                          setPurchaseAmount('');
+                          setPurchaseNotes('');
+                          setPurchaseMessage('');
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+              )}
             </div>
           </div>
         )}
