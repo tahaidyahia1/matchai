@@ -21,7 +21,8 @@ export const menuItems: MenuItem[] = [
     name: 'Vanilla Nine',
     description: 'A bold mix of East and West',
     prices: { small: 60, big: 70 },
-    category: 'drink'
+    category: 'drink',
+    image: '/geminii.jpg'
   },
   {
     id: 'banana-flame',
