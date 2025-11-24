@@ -8,8 +8,8 @@ export default function About() {
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
-              About Matchai
+            <h1 className="text-4xl md:text-6xl font-black text-gray-800 mb-6 tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
+              About MATCHAI
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Where the ancient art of matcha meets modern elegance in the heart of Rabat
@@ -120,8 +120,8 @@ At machai we believe matcha is more than a drink. it's a ritual of balance, clar
             </div>
             
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
-                The Matchai Experience
+              <h2 className="text-3xl md:text-4xl font-black text-gray-800 mb-6 tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
+                The MATCHAI Experience
               </h2>
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
                 Step into our thoughtfully designed space in Agdal, where every element has been carefully chosen to create 
