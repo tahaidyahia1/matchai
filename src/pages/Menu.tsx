@@ -15,18 +15,20 @@ export default function Menu() {
 
   return (
     <div className="pt-16 bg-cream-50">
-      <section className="py-24 bg-gradient-to-br from-cream-100 via-white to-matcha-50 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-matcha-200/30 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-cream-300/40 rounded-full blur-3xl"></div>
+      <section className="py-24 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-gray-300 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gray-200 rounded-full blur-3xl"></div>
+        </div>
         <div className="max-w-5xl mx-auto text-center px-4 relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-full border border-matcha-200/50 mb-8 animate-slide-up">
-            <Sparkles className="h-4 w-4 text-matcha-600" />
-            <span className="text-sm font-medium text-charcoal-700">Ceremonially Crafted</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-gray-200 mb-8 animate-slide-up">
+            <Sparkles className="h-4 w-4 text-gray-700" />
+            <span className="text-sm font-medium text-gray-700" style={{ fontFamily: 'Oswald, sans-serif' }}>Ceremonially Crafted</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-black text-charcoal-950 mb-8 animate-fade-in tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
+          <h1 className="text-5xl md:text-7xl font-black text-gray-800 mb-8 animate-fade-in tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
             Our Menu
           </h1>
-          <p className="text-xl md:text-2xl text-charcoal-600 max-w-3xl mx-auto font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.1s' }}>
             Each creation harmoniously blends Japanese matcha tradition with innovative flavor profiles
           </p>
         </div>
