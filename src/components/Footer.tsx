@@ -99,7 +99,7 @@ export default function Footer() {
         <div className="border-t border-charcoal-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-cream-300 text-sm font-light">
-              © 2025 Matchai. Crafted with passion in Rabat.
+              © 2025 MATCHAI. Crafted with passion in Rabat.
             </p>
             <div className="flex items-center gap-2 text-cream-400 text-xs">
               <span className="px-3 py-1.5 bg-charcoal-800 rounded-full">Premium Matcha</span>

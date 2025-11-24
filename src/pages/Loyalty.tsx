@@ -435,12 +435,12 @@ export default function Loyalty() {
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <span className="text-green-700 font-medium">Matchai Points Rewards</span>
+          <span className="text-green-700 font-black tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>MATCHAI Points Rewards</span>
           <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
             Stay Elegant, Stay Rewarded
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto">
-            Every sip brings you closer to rewards. Earn Matchai Points and unlock exclusive benefits.
+            Every sip brings you closer to rewards. Earn MATCHAI Points and unlock exclusive benefits.
           </p>
         </div>
       </section>
@@ -450,7 +450,7 @@ export default function Loyalty() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-              How Matchai Points Work
+              How MATCHAI Points Work
             </h2>
             <p className="text-lg text-gray-600">Simple, elegant, and rewarding</p>
           </div>
@@ -602,7 +602,7 @@ export default function Loyalty() {
                 Add to Apple Wallet
               </h2>
               <p className="text-lg text-gray-600 mb-6">
-                Keep your Matchai Points card in your Apple Wallet for easy access and automatic updates.
+                Keep your MATCHAI Points card in your Apple Wallet for easy access and automatic updates.
                 Never miss a point or reward again.
               </p>
               <div className="space-y-4 mb-8">
@@ -640,7 +640,7 @@ export default function Loyalty() {
                     <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center mb-2">
                       <span className="text-white font-bold text-sm">M</span>
                     </div>
-                    <div className="text-xl font-bold">Matchai Points</div>
+                    <div className="text-xl font-black tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>MATCHAI Points</div>
                   </div>
                   <div className="text-center">
                     <div className="text-3xl font-bold mb-1">{user && loyaltyData ? loyaltyData.total_points : '150'}</div>
@@ -663,7 +663,7 @@ export default function Loyalty() {
             Start Earning Today
           </h2>
           <p className="text-xl text-gray-100 mb-8">
-            Visit our store in Agdal to get your Matchai Points card and start earning rewards with every purchase.
+            Visit our store in Agdal to get your MATCHAI Points card and start earning rewards with every purchase.
           </p>
           <div className="space-x-4">
             <Button

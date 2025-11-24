@@ -48,7 +48,7 @@ export default function Contact() {
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Information */}
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-8">Visit Matchai Agdal</h2>
+              <h2 className="text-3xl font-black text-gray-800 mb-8 tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>Visit MATCHAI Agdal</h2>
               
               <div className="space-y-6 mb-8">
                 <div className="flex items-start space-x-4">

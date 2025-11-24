@@ -257,7 +257,7 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">Matchai Admin</h1>
+              <h1 className="text-2xl font-black text-gray-800 tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>MATCHAI Admin</h1>
               <p className="text-sm text-gray-600">Welcome, {admin.full_name}</p>
             </div>
             <Button

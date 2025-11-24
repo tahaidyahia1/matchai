@@ -26,7 +26,7 @@ Driven by our passion for matcha and the lack of high-quality options in Morocco
 At machai we believe matcha is more than a drink. it's a ritual of balance, clarity, and energy. Our mission is to bring the authentic taste of Japanese matcha to Rabat, with a modern twist that matches your lifestyle.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
-              Whether you're starting your day, taking a break, or meeting with friends, Matchai is your location for pure green energy. 
+              Whether you're starting your day, taking a break, or meeting with friends, MATCHAI is your location for pure green energy. 
               </p>
             </div>
             <div className="relative">

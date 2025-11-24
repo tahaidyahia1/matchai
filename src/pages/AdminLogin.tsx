@@ -35,7 +35,7 @@ export default function AdminLogin() {
             <Shield className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">Admin Portal</h1>
-          <p className="text-gray-300">Sign in to manage Matchai loyalty program</p>
+          <p className="text-gray-300">Sign in to manage MATCHAI loyalty program</p>
         </div>
 
         <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
