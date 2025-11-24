@@ -30,6 +30,7 @@ export const menuItems: MenuItem[] = [
     name: 'Banana Flame',
     description: 'Zesty, light, and uplifting',
     prices: { small: 60, big: 70 },
-    category: 'drink'
+    category: 'drink',
+    image: '/geminiiii.jpg'
   }
 ];
