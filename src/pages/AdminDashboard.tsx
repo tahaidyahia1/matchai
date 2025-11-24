@@ -121,15 +121,17 @@ export default function AdminDashboard() {
     setMessage('');
 
     try {
-      const points = parseInt(pointsAdjustment);
-      await adjustPoints(selectedCustomer.id, points, adjustmentReason);
-      setMessage(`Successfully adjusted points by ${points > 0 ? '+' : ''}${points}`);
+      const purchaseAmount = parseFloat(pointsAdjustment);
+      const points = Math.floor(purchaseAmount / 10);
+
+      await adjustPoints(selectedCustomer.id, points, adjustmentReason || `Purchase: ${purchaseAmount} MAD`);
+      setMessage(`Successfully added ${points} points for ${purchaseAmount} MAD purchase`);
       setPointsAdjustment('');
       setAdjustmentReason('');
       setSelectedCustomer(null);
       await loadDashboardData();
     } catch (error: any) {
-      setMessage(error.message || 'Failed to adjust points');
+      setMessage(error.message || 'Failed to add points');
     } finally {
       setIsLoading(false);
     }
@@ -332,9 +334,9 @@ export default function AdminDashboard() {
                       <td className="px-6 py-4">
                         <button
                           onClick={() => setSelectedCustomer(customer)}
-                          className="text-black hover:text-gray-700 font-medium text-sm"
+                          className="text-green-600 hover:text-green-700 font-medium text-sm"
                         >
-                          Adjust Points
+                          Add Purchase
                         </button>
                       </td>
                     </tr>
@@ -347,35 +349,53 @@ export default function AdminDashboard() {
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                 <div className="bg-white rounded-xl p-6 max-w-md w-full">
                   <h3 className="text-xl font-bold text-gray-800 mb-4">
-                    Adjust Points for {selectedCustomer.full_name}
+                    Add Points for {selectedCustomer.full_name}
                   </h3>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                    <p className="text-sm text-blue-800">
+                      <strong>For purchases:</strong> Enter purchase amount in MAD. System calculates 1 point per 10 MAD automatically.
+                    </p>
+                  </div>
                   <form onSubmit={handleAdjustPoints} className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Points Adjustment
+                        Purchase Amount (MAD)
                       </label>
                       <input
                         type="number"
                         value={pointsAdjustment}
-                        onChange={(e) => setPointsAdjustment(e.target.value)}
-                        placeholder="e.g., 50 or -50"
+                        onChange={(e) => {
+                          const amount = e.target.value;
+                          setPointsAdjustment(amount);
+                          if (amount) {
+                            const points = Math.floor(parseFloat(amount) / 10);
+                            setAdjustmentReason(`Purchase: ${amount} MAD = ${points} points`);
+                          }
+                        }}
+                        placeholder="e.g., 150 (for 150 MAD purchase)"
                         required
+                        min="1"
+                        step="0.01"
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
                       />
                       <p className="text-xs text-gray-500 mt-1">
-                        Use positive numbers to add points, negative to subtract
+                        Enter the total purchase amount. Points will be calculated automatically (1 point per 10 MAD).
                       </p>
+                      {pointsAdjustment && (
+                        <p className="text-sm font-medium text-green-600 mt-2">
+                          Customer will earn: {Math.floor(parseFloat(pointsAdjustment) / 10)} points
+                        </p>
+                      )}
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Reason
+                        Notes (Optional)
                       </label>
                       <textarea
                         value={adjustmentReason}
                         onChange={(e) => setAdjustmentReason(e.target.value)}
-                        placeholder="Explain why you're adjusting points..."
-                        required
-                        rows={3}
+                        placeholder="Add any additional notes..."
+                        rows={2}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black resize-none"
                       />
                     </div>

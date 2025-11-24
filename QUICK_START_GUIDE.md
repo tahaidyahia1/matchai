@@ -76,13 +76,14 @@ In the admin dashboard:
 
 ## Step 5: Test Points & Redemption (30 seconds)
 
-### Add Points to Test Customer
+### Add Points to Test Customer (Simulate a Purchase)
 1. Go back to admin dashboard
 2. Click "Customers" tab
 3. Find your test customer
-4. Click "Adjust Points"
-5. Add 100 points with reason "Testing"
-6. Confirm
+4. Click "Add Purchase"
+5. Enter purchase amount: 500 MAD (this gives 50 points)
+6. System shows: "Customer will earn: 50 points"
+7. Click "Confirm"
 
 ### Redeem a Reward
 1. Refresh customer loyalty page
@@ -155,10 +156,11 @@ Your loyalty system is now fully operational with:
 ### When a Customer Makes a Purchase
 1. Log in to admin dashboard
 2. Go to "Customers" tab
-3. Search for customer
-4. Click "Adjust Points"
-5. Enter purchase amount in points (divide by 10)
-6. Add reason: "Purchase - [amount] MAD"
+3. Search for customer (by name, email, or phone)
+4. Click "Add Purchase" button
+5. Enter the purchase amount in MAD (e.g., 150 MAD)
+6. System automatically calculates points (150 MAD = 15 points)
+7. Click "Confirm" - Points added instantly to customer account!
 
 ### When a Customer Wants to Redeem
 1. Customer signs in to their account

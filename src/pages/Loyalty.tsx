@@ -3,7 +3,7 @@ import { Gift, Smartphone, Star, Coffee, Award, CreditCard, LogOut, History, Sho
 import Button from '../components/Button';
 import { useAuth } from '../context/AuthContext';
 import AuthModal from '../components/AuthModal';
-import { getPointsTransactions, addPointsForPurchase, lookupPointsByPhone } from '../services/loyaltyService';
+import { getPointsTransactions, lookupPointsByPhone } from '../services/loyaltyService';
 import { getActiveRewards, redeemReward, getUserRedemptions, Reward, Redemption } from '../services/rewardsService';
 
 interface Transaction {
@@ -20,10 +20,7 @@ export default function Loyalty() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showTransactions, setShowTransactions] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [showPurchaseForm, setShowPurchaseForm] = useState(false);
-  const [orderAmount, setOrderAmount] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [purchaseMessage, setPurchaseMessage] = useState('');
   const [showLookupForm, setShowLookupForm] = useState(false);
   const [lookupPhone, setLookupPhone] = useState('');
   const [lookupResult, setLookupResult] = useState<any>(null);
@@ -49,36 +46,6 @@ export default function Loyalty() {
       } catch (error) {
         console.error('Failed to load transactions:', error);
       }
-    }
-  };
-
-  const handlePurchase = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user || !orderAmount) return;
-
-    setIsProcessing(true);
-    setPurchaseMessage('');
-
-    try {
-      const amount = parseFloat(orderAmount);
-      if (amount <= 0) {
-        setPurchaseMessage('Please enter a valid amount');
-        return;
-      }
-
-      const result = await addPointsForPurchase(user.id, amount);
-      setPurchaseMessage(`Success! You earned ${result.pointsEarned} points!`);
-      setOrderAmount('');
-      setShowPurchaseForm(false);
-      await refreshLoyaltyData();
-      if (showTransactions) {
-        await loadTransactions();
-      }
-    } catch (error) {
-      setPurchaseMessage('Failed to add points. Please try again.');
-      console.error('Purchase error:', error);
-    } finally {
-      setIsProcessing(false);
     }
   };
 
@@ -215,15 +182,8 @@ export default function Loyalty() {
 
             <div className="flex flex-wrap gap-4">
               <button
-                onClick={() => setShowPurchaseForm(!showPurchaseForm)}
-                className="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
-              >
-                <ShoppingBag className="h-4 w-4" />
-                <span>Record Purchase</span>
-              </button>
-              <button
                 onClick={() => setShowRewards(!showRewards)}
-                className="flex items-center space-x-2 px-4 py-2 bg-white bg-opacity-10 hover:bg-opacity-20 rounded-lg transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
               >
                 <Gift className="h-4 w-4" />
                 <span>{showRewards ? 'Hide' : 'Browse'} Rewards</span>
@@ -244,57 +204,22 @@ export default function Loyalty() {
               </button>
             </div>
 
-            {showPurchaseForm && (
-              <div className="mt-6 bg-white bg-opacity-10 rounded-2xl p-6">
-                <h3 className="text-xl font-bold mb-4">Record a Purchase</h3>
-                <form onSubmit={handlePurchase} className="space-y-4">
-                  <div>
-                    <label htmlFor="amount" className="block text-sm font-medium mb-2">
-                      Purchase Amount (MAD)
-                    </label>
-                    <input
-                      type="number"
-                      id="amount"
-                      value={orderAmount}
-                      onChange={(e) => setOrderAmount(e.target.value)}
-                      placeholder="e.g., 50"
-                      min="1"
-                      step="0.01"
-                      required
-                      className="w-full px-4 py-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
-                    <p className="text-sm text-gray-300 mt-2">
-                      You'll earn 1 point for every 10 MAD spent
-                    </p>
+            <div className="mt-6 bg-green-600 bg-opacity-20 border border-green-500 rounded-2xl p-6">
+              <div className="flex items-start space-x-3">
+                <ShoppingBag className="h-6 w-6 text-green-300 flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="text-lg font-bold text-white mb-2">How to Earn Points</h3>
+                  <p className="text-green-100 mb-3">
+                    Visit our store in Agdal and make a purchase. Our staff will add points to your account automatically!
+                  </p>
+                  <div className="space-y-2 text-sm text-green-200">
+                    <p>✓ 1 point for every 10 MAD spent</p>
+                    <p>✓ Points appear instantly in your account</p>
+                    <p>✓ No need to do anything - it's automatic!</p>
                   </div>
-                  <div className="flex gap-3">
-                    <button
-                      type="submit"
-                      disabled={isProcessing}
-                      className="px-6 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isProcessing ? 'Processing...' : 'Add Points'}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setShowPurchaseForm(false);
-                        setOrderAmount('');
-                        setPurchaseMessage('');
-                      }}
-                      className="px-6 py-2 bg-white bg-opacity-10 hover:bg-opacity-20 rounded-lg transition-colors"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                  {purchaseMessage && (
-                    <p className={`text-sm ${purchaseMessage.includes('Success') ? 'text-green-400' : 'text-red-400'}`}>
-                      {purchaseMessage}
-                    </p>
-                  )}
-                </form>
+                </div>
               </div>
-            )}
+            </div>
 
             {showRewards && (
               <div className="mt-6 bg-white bg-opacity-10 rounded-2xl p-6">
