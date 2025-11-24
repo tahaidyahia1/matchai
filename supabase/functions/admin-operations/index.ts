@@ -38,6 +38,19 @@ async function logAdminAction(
   });
 }
 
+async function verifyAdmin(supabase: any, adminId: string): Promise<boolean> {
+  if (!adminId) return false;
+
+  const { data } = await supabase
+    .from('admin_users')
+    .select('id, is_active')
+    .eq('id', adminId)
+    .eq('is_active', true)
+    .maybeSingle();
+
+  return !!data;
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, {
@@ -101,18 +114,9 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'get-all-customers') {
-      if (!adminId) {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
         throw new Error('Admin authentication required');
-      }
-
-      const { data: adminCheck } = await supabase
-        .from('admin_users')
-        .select('id, is_active')
-        .eq('id', adminId)
-        .maybeSingle();
-
-      if (!adminCheck || !adminCheck.is_active) {
-        throw new Error('Invalid or inactive admin account');
       }
 
       const { page = 1, limit = 50, search = '' } = body;
@@ -155,6 +159,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'adjust-points') {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
+        throw new Error('Admin authentication required');
+      }
+
       const { userId, points, reason } = body;
 
       const { data: currentPoints, error: fetchError } = await supabase
@@ -221,6 +230,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'get-customer-details') {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
+        throw new Error('Admin authentication required');
+      }
+
       const { userId } = body;
 
       const { data: userData, error: userError } = await supabase
@@ -279,6 +293,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'create-reward') {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
+        throw new Error('Admin authentication required');
+      }
+
       const { name, description, pointsRequired, category, imageUrl, stockQuantity } = body;
 
       const { data, error } = await supabase
@@ -319,6 +338,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'update-reward') {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
+        throw new Error('Admin authentication required');
+      }
+
       const { rewardId, updates } = body;
 
       const { data, error } = await supabase
@@ -352,6 +376,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'get-all-rewards') {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
+        throw new Error('Admin authentication required');
+      }
+
       const { includeInactive = false } = body;
 
       let query = supabase
@@ -379,6 +408,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'get-pending-redemptions') {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
+        throw new Error('Admin authentication required');
+      }
+
       const { data, error } = await supabase
         .from('redemptions')
         .select(`
@@ -403,6 +437,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'update-redemption-status') {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
+        throw new Error('Admin authentication required');
+      }
+
       const { redemptionId, status, notes } = body;
 
       const updates: any = { status, notes };
@@ -445,6 +484,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'create-promotion') {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
+        throw new Error('Admin authentication required');
+      }
+
       const { name, description, type, value, minPurchase, startDate, endDate } = body;
 
       const { data, error } = await supabase
@@ -486,6 +530,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'get-all-promotions') {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
+        throw new Error('Admin authentication required');
+      }
+
       const { includeInactive = false } = body;
 
       let query = supabase
@@ -513,6 +562,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'update-promotion') {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
+        throw new Error('Admin authentication required');
+      }
+
       const { promotionId, updates } = body;
 
       const { data, error } = await supabase
@@ -546,6 +600,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'get-dashboard-stats') {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
+        throw new Error('Admin authentication required');
+      }
+
       const { data: totalUsers } = await supabase
         .from('users')
         .select('id', { count: 'exact', head: true });
@@ -587,6 +646,11 @@ Deno.serve(async (req: Request) => {
     }
 
     if (action === 'get-audit-logs') {
+      const isValidAdmin = await verifyAdmin(supabase, adminId);
+      if (!isValidAdmin) {
+        throw new Error('Admin authentication required');
+      }
+
       const { page = 1, limit = 50 } = body;
       const offset = (page - 1) * limit;
 
