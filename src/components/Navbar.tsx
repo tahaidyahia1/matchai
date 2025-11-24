@@ -26,8 +26,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-5">
           <Link to="/" className="flex items-center space-x-2 group">
-            <span className="text-3xl font-display font-bold text-charcoal-950" style={{ letterSpacing: '-0.02em' }}>
-              Matchai
+            <span className="text-3xl font-black text-charcoal-950 tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
+              MATCHAI
             </span>
           </Link>
 

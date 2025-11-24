@@ -19,8 +19,8 @@ export default function Hero() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-matcha-100/20 to-transparent rounded-full blur-2xl"></div>
 
       <div className="relative z-10 text-center max-w-5xl mx-auto px-4 animate-fade-in">
-        <h1 className="text-6xl md:text-8xl font-display font-bold text-charcoal-950 mb-6 leading-[1.1] animate-slide-up" style={{ letterSpacing: '-0.02em' }}>
-         Matchai
+        <h1 className="text-6xl md:text-8xl font-black text-charcoal-950 mb-6 leading-[1.1] animate-slide-up tracking-tight uppercase" style={{ fontFamily: 'Oswald, sans-serif', fontWeight: 700 }}>
+         MATCHAI
           <span className="block text-charcoal-950"></span>
         </h1>
 
