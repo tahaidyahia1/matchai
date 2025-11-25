@@ -10,7 +10,7 @@ The system uses SHA-256 hashing for passwords. You can generate a hash using Nod
 
 ```javascript
 const crypto = require('crypto');
-const password = 'YourSecurePassword123!';
+const password = 'Matchai@777321';
 const hash = crypto.createHash('sha256').update(password).digest('hex');
 console.log(hash);
 ```
