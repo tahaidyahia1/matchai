@@ -1,4 +1,5 @@
 const API_URL = import.meta.env.VITE_SUPABASE_URL;
+const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export interface AdminUser {
   id: string;
@@ -32,6 +33,7 @@ export async function adminSignIn(email: string, password: string): Promise<Admi
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'admin-signin',
@@ -39,6 +41,10 @@ export async function adminSignIn(email: string, password: string): Promise<Admi
       password,
     }),
   });
+
+  if (!response.ok) {
+    throw new Error('Failed to sign in');
+  }
 
   const result = await response.json();
   if (result.error) throw new Error(result.error);
@@ -57,6 +63,7 @@ export async function getAllCustomers(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'get-all-customers',
@@ -66,6 +73,10 @@ export async function getAllCustomers(
       search,
     }),
   });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch customers');
+  }
 
   const result = await response.json();
   if (result.error) throw new Error(result.error);
@@ -84,6 +95,7 @@ export async function adjustPoints(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'adjust-points',
@@ -107,6 +119,7 @@ export async function getCustomerDetails(userId: string) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'get-customer-details',
@@ -128,6 +141,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'get-dashboard-stats',
@@ -148,6 +162,7 @@ export async function getAllRewards(includeInactive: boolean = false) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'get-all-rewards',
@@ -176,6 +191,7 @@ export async function createReward(rewardData: {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'create-reward',
@@ -197,6 +213,7 @@ export async function updateReward(rewardId: string, updates: any) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'update-reward',
@@ -219,6 +236,7 @@ export async function getPendingRedemptions() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'get-pending-redemptions',
@@ -243,6 +261,7 @@ export async function updateRedemptionStatus(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'update-redemption-status',
@@ -266,6 +285,7 @@ export async function getAllPromotions(includeInactive: boolean = false) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'get-all-promotions',
@@ -295,6 +315,7 @@ export async function createPromotion(promotionData: {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'create-promotion',
@@ -316,6 +337,7 @@ export async function updatePromotion(promotionId: string, updates: any) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'update-promotion',
@@ -338,6 +360,7 @@ export async function getAuditLogs(page: number = 1, limit: number = 50) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'get-audit-logs',
@@ -360,6 +383,7 @@ export async function deleteCustomer(userId: string): Promise<void> {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ANON_KEY}`,
     },
     body: JSON.stringify({
       action: 'delete-customer',
