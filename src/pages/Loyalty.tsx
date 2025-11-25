@@ -427,6 +427,14 @@ export default function Loyalty() {
               >
                 Sign In / Sign Up
               </Button>
+              <div className="mt-6">
+                <a
+                  href="/admin/login"
+                  className="text-sm text-gray-400 hover:text-gray-300 transition-colors"
+                >
+                  Admin Access
+                </a>
+              </div>
             </div>
           </div>
         </section>
